@@ -1,26 +1,21 @@
-import { AzureFunction, Context, HttpRequest } from "@azure/functions";
+import { app, HttpRequest, HttpResponseInit, InvocationContext } from "@azure/functions";
 import Stripe from "stripe";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "", {
   apiVersion: "2023-10-16",
 });
 
-const httpTrigger: AzureFunction = async function (
-  context: Context,
-  req: HttpRequest
-): Promise<void> {
+async function subscriptionStatus(req: HttpRequest, context: InvocationContext): Promise<HttpResponseInit> {
   try {
-    const customerId = req.query.customerId;
+    const customerId = req.query.get("customerId");
 
     if (!customerId) {
-      context.res = {
+      return {
         status: 400,
-        body: { error: "Missing customerId" },
+        jsonBody: { error: "Missing customerId" },
       };
-      return;
     }
 
-    // Get all subscriptions for this customer
     const subscriptions = await stripe.subscriptions.list({
       customer: customerId,
       status: "active",
@@ -28,23 +23,20 @@ const httpTrigger: AzureFunction = async function (
     });
 
     if (subscriptions.data.length === 0) {
-      context.res = {
+      return {
         status: 200,
-        headers: { "Content-Type": "application/json" },
-        body: {
+        jsonBody: {
           active: false,
           customerId,
         },
       };
-      return;
     }
 
     const subscription = subscriptions.data[0];
 
-    context.res = {
+    return {
       status: 200,
-      headers: { "Content-Type": "application/json" },
-      body: {
+      jsonBody: {
         active: true,
         customerId,
         subscriptionId: subscription.id,
@@ -53,12 +45,16 @@ const httpTrigger: AzureFunction = async function (
       },
     };
   } catch (error) {
-    context.log.error("Subscription status error:", error);
-    context.res = {
+    context.error("Subscription status error:", error);
+    return {
       status: 500,
-      body: { error: error instanceof Error ? error.message : "Internal server error" },
+      jsonBody: { error: error instanceof Error ? error.message : "Internal server error" },
     };
   }
-};
+}
 
-export default httpTrigger;
+app.http("subscription-status", {
+  methods: ["GET"],
+  authLevel: "anonymous",
+  handler: subscriptionStatus,
+});

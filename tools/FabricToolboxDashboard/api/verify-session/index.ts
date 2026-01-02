@@ -1,44 +1,37 @@
-import { AzureFunction, Context, HttpRequest } from "@azure/functions";
+import { app, HttpRequest, HttpResponseInit, InvocationContext } from "@azure/functions";
 import Stripe from "stripe";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "", {
   apiVersion: "2023-10-16",
 });
 
-const httpTrigger: AzureFunction = async function (
-  context: Context,
-  req: HttpRequest
-): Promise<void> {
+async function verifySession(req: HttpRequest, context: InvocationContext): Promise<HttpResponseInit> {
   try {
-    const sessionId = req.query.sessionId;
+    const sessionId = req.query.get("sessionId");
 
     if (!sessionId) {
-      context.res = {
+      return {
         status: 400,
-        body: { error: "Missing sessionId" },
+        jsonBody: { error: "Missing sessionId" },
       };
-      return;
     }
 
-    // Retrieve the checkout session
     const session = await stripe.checkout.sessions.retrieve(sessionId, {
       expand: ["subscription"],
     });
 
     if (session.payment_status !== "paid") {
-      context.res = {
+      return {
         status: 400,
-        body: { error: "Payment not completed" },
+        jsonBody: { error: "Payment not completed" },
       };
-      return;
     }
 
     const subscription = session.subscription as Stripe.Subscription;
 
-    context.res = {
+    return {
       status: 200,
-      headers: { "Content-Type": "application/json" },
-      body: {
+      jsonBody: {
         active: true,
         customerId: session.customer as string,
         subscriptionId: subscription.id,
@@ -46,12 +39,16 @@ const httpTrigger: AzureFunction = async function (
       },
     };
   } catch (error) {
-    context.log.error("Verify session error:", error);
-    context.res = {
+    context.error("Verify session error:", error);
+    return {
       status: 500,
-      body: { error: error instanceof Error ? error.message : "Internal server error" },
+      jsonBody: { error: error instanceof Error ? error.message : "Internal server error" },
     };
   }
-};
+}
 
-export default httpTrigger;
+app.http("verify-session", {
+  methods: ["GET"],
+  authLevel: "anonymous",
+  handler: verifySession,
+});

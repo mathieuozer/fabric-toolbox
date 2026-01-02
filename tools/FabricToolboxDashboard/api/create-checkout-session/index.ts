@@ -1,24 +1,23 @@
-import { AzureFunction, Context, HttpRequest } from "@azure/functions";
+import { app, HttpRequest, HttpResponseInit, InvocationContext } from "@azure/functions";
 import Stripe from "stripe";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "", {
   apiVersion: "2023-10-16",
 });
 
-const httpTrigger: AzureFunction = async function (
-  context: Context,
-  req: HttpRequest
-): Promise<void> {
+async function createCheckoutSession(req: HttpRequest, context: InvocationContext): Promise<HttpResponseInit> {
   try {
-    const { priceId, email, customerId, successUrl, cancelUrl } = req.body;
+    const body = await req.json() as { priceId?: string; email?: string; customerId?: string; successUrl?: string; cancelUrl?: string };
+    const { priceId, email, customerId, successUrl, cancelUrl } = body;
 
     if (!priceId) {
-      context.res = {
+      return {
         status: 400,
-        body: { error: "Missing priceId" },
+        jsonBody: { error: "Missing priceId" },
       };
-      return;
     }
+
+    const origin = req.headers.get("origin") || "https://nice-wave-0d4061b03.6.azurestaticapps.net";
 
     const sessionParams: Stripe.Checkout.SessionCreateParams = {
       mode: "subscription",
@@ -29,11 +28,10 @@ const httpTrigger: AzureFunction = async function (
           quantity: 1,
         },
       ],
-      success_url: successUrl || `${req.headers.origin}/subscription/success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: cancelUrl || `${req.headers.origin}/subscription/cancelled`,
+      success_url: successUrl || `${origin}/subscription/success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: cancelUrl || `${origin}/subscription/cancelled`,
     };
 
-    // If we have a customer ID, use it; otherwise use email for new customer
     if (customerId) {
       sessionParams.customer = customerId;
     } else if (email) {
@@ -42,21 +40,24 @@ const httpTrigger: AzureFunction = async function (
 
     const session = await stripe.checkout.sessions.create(sessionParams);
 
-    context.res = {
+    return {
       status: 200,
-      headers: { "Content-Type": "application/json" },
-      body: {
+      jsonBody: {
         sessionId: session.id,
         url: session.url,
       },
     };
   } catch (error) {
-    context.log.error("Checkout session error:", error);
-    context.res = {
+    context.error("Checkout session error:", error);
+    return {
       status: 500,
-      body: { error: error instanceof Error ? error.message : "Internal server error" },
+      jsonBody: { error: error instanceof Error ? error.message : "Internal server error" },
     };
   }
-};
+}
 
-export default httpTrigger;
+app.http("create-checkout-session", {
+  methods: ["POST"],
+  authLevel: "anonymous",
+  handler: createCheckoutSession,
+});

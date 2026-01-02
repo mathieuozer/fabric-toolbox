@@ -34,10 +34,11 @@ jobs:
           VITE_STRIPE_PUBLISHABLE_KEY: ${{ secrets.VITE_STRIPE_PUBLISHABLE_KEY }}
           VITE_STRIPE_PRICE_ID: ${{ secrets.VITE_STRIPE_PRICE_ID }}
 
-      - name: Install API dependencies
+      - name: Install and Build API
         run: |
           cd tools/FabricToolboxDashboard/api
           npm ci
+          npm run build
 
       - name: Build And Deploy
         id: builddeploy

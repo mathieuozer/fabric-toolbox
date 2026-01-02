@@ -1,4 +1,4 @@
-import { AzureFunction, Context, HttpRequest } from "@azure/functions";
+import { app, HttpRequest, HttpResponseInit, InvocationContext } from "@azure/functions";
 import Stripe from "stripe";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "", {
@@ -7,68 +7,62 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "", {
 
 const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET || "";
 
-const httpTrigger: AzureFunction = async function (
-  context: Context,
-  req: HttpRequest
-): Promise<void> {
-  const sig = req.headers["stripe-signature"];
+async function webhook(req: HttpRequest, context: InvocationContext): Promise<HttpResponseInit> {
+  const sig = req.headers.get("stripe-signature");
 
   if (!sig) {
-    context.res = {
+    return {
       status: 400,
-      body: { error: "Missing stripe-signature header" },
+      jsonBody: { error: "Missing stripe-signature header" },
     };
-    return;
   }
 
   let event: Stripe.Event;
 
   try {
-    // Get raw body for signature verification
-    const rawBody = req.rawBody || JSON.stringify(req.body);
+    const rawBody = await req.text();
     event = stripe.webhooks.constructEvent(rawBody, sig, endpointSecret);
   } catch (err) {
-    context.log.error("Webhook signature verification failed:", err);
-    context.res = {
+    context.error("Webhook signature verification failed:", err);
+    return {
       status: 400,
-      body: { error: `Webhook Error: ${err instanceof Error ? err.message : "Unknown error"}` },
+      jsonBody: { error: `Webhook Error: ${err instanceof Error ? err.message : "Unknown error"}` },
     };
-    return;
   }
 
-  // Handle the event
   switch (event.type) {
     case "customer.subscription.created":
-      context.log.info("Subscription created:", event.data.object);
-      // You could store this in a database if needed
+      context.log("Subscription created:", event.data.object);
       break;
 
     case "customer.subscription.updated":
-      context.log.info("Subscription updated:", event.data.object);
+      context.log("Subscription updated:", event.data.object);
       break;
 
     case "customer.subscription.deleted":
-      context.log.info("Subscription deleted:", event.data.object);
-      // Handle subscription cancellation
+      context.log("Subscription deleted:", event.data.object);
       break;
 
     case "invoice.payment_succeeded":
-      context.log.info("Payment succeeded:", event.data.object);
+      context.log("Payment succeeded:", event.data.object);
       break;
 
     case "invoice.payment_failed":
-      context.log.warn("Payment failed:", event.data.object);
-      // You might want to notify the user
+      context.warn("Payment failed:", event.data.object);
       break;
 
     default:
-      context.log.info(`Unhandled event type: ${event.type}`);
+      context.log(`Unhandled event type: ${event.type}`);
   }
 
-  context.res = {
+  return {
     status: 200,
-    body: { received: true },
+    jsonBody: { received: true },
   };
-};
+}
 
-export default httpTrigger;
+app.http("webhook", {
+  methods: ["POST"],
+  authLevel: "anonymous",
+  handler: webhook,
+});

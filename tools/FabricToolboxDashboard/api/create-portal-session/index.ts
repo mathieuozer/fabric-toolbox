@@ -1,44 +1,44 @@
-import { AzureFunction, Context, HttpRequest } from "@azure/functions";
+import { app, HttpRequest, HttpResponseInit, InvocationContext } from "@azure/functions";
 import Stripe from "stripe";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "", {
   apiVersion: "2023-10-16",
 });
 
-const httpTrigger: AzureFunction = async function (
-  context: Context,
-  req: HttpRequest
-): Promise<void> {
+async function createPortalSession(req: HttpRequest, context: InvocationContext): Promise<HttpResponseInit> {
   try {
-    const { customerId, returnUrl } = req.body;
+    const body = await req.json() as { customerId?: string; returnUrl?: string };
+    const { customerId, returnUrl } = body;
 
     if (!customerId) {
-      context.res = {
+      return {
         status: 400,
-        body: { error: "Missing customerId" },
+        jsonBody: { error: "Missing customerId" },
       };
-      return;
     }
+
+    const origin = req.headers.get("origin") || "https://nice-wave-0d4061b03.6.azurestaticapps.net";
 
     const session = await stripe.billingPortal.sessions.create({
       customer: customerId,
-      return_url: returnUrl || req.headers.origin || "",
+      return_url: returnUrl || origin,
     });
 
-    context.res = {
+    return {
       status: 200,
-      headers: { "Content-Type": "application/json" },
-      body: {
-        url: session.url,
-      },
+      jsonBody: { url: session.url },
     };
   } catch (error) {
-    context.log.error("Portal session error:", error);
-    context.res = {
+    context.error("Portal session error:", error);
+    return {
       status: 500,
-      body: { error: error instanceof Error ? error.message : "Internal server error" },
+      jsonBody: { error: error instanceof Error ? error.message : "Internal server error" },
     };
   }
-};
+}
 
-export default httpTrigger;
+app.http("create-portal-session", {
+  methods: ["POST"],
+  authLevel: "anonymous",
+  handler: createPortalSession,
+});
