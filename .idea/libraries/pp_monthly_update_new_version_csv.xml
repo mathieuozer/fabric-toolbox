@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="pp-monthly-update-new-version.csv">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/samples/OneLake/write-to-open-mirror-landing-zone/OneLakeOpenMirroringExample.Tests/UkHousePrices/SampleData/pp-monthly-update-new-version.csv.zip!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
