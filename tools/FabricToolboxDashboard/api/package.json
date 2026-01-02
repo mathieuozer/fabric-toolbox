@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "Azure Functions API for Fabric Toolbox",
   "main": "dist/src/index.js",
+  "engines": {
+    "node": ">=20.0"
+  },
   "scripts": {
     "build": "tsc",
     "watch": "tsc -w",

@@ -40,6 +40,15 @@ jobs:
           npm ci
           npm run build
 
+      - name: Prepare for deployment
+        run: |
+          # Remove large folders to stay under 250MB limit
+          rm -rf tools/FabricToolboxDashboard/fabric-tools
+          rm -rf tools/FabricToolboxDashboard/node_modules
+          # Remove API source files, keep only dist
+          rm -f tools/FabricToolboxDashboard/api/*/index.ts
+          rm -f tools/FabricToolboxDashboard/api/src/index.ts
+
       - name: Build And Deploy
         id: builddeploy
         uses: Azure/static-web-apps-deploy@v1
