@@ -1,12 +1,23 @@
 import { app, HttpRequest, HttpResponseInit, InvocationContext } from "@azure/functions";
 import Stripe from "stripe";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "", {
+const stripeSecretKey = process.env.STRIPE_SECRET_KEY || "";
+
+const stripe = new Stripe(stripeSecretKey, {
   apiVersion: "2023-10-16",
 });
 
 async function createCheckoutSession(req: HttpRequest, context: InvocationContext): Promise<HttpResponseInit> {
   try {
+    // Check if Stripe is configured
+    if (!stripeSecretKey) {
+      context.error("STRIPE_SECRET_KEY is not configured");
+      return {
+        status: 500,
+        jsonBody: { error: "Payment system not configured. Please contact support." },
+      };
+    }
+
     const body = await req.json() as { priceId?: string; email?: string; customerId?: string; successUrl?: string; cancelUrl?: string };
     const { priceId, email, customerId, successUrl, cancelUrl } = body;
 
