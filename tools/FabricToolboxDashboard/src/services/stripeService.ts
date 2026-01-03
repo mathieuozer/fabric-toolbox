@@ -184,7 +184,14 @@ export async function verifyCheckoutSession(
  * Redirects to Stripe Checkout
  */
 export async function redirectToCheckout(email?: string): Promise<void> {
-  const customerId = getStoredCustomerId() || undefined;
+  // Get stored customer ID, but ignore mock IDs from testing
+  let customerId = getStoredCustomerId() || undefined;
+  if (customerId?.startsWith('cus_mock_')) {
+    console.log('Ignoring mock customer ID');
+    customerId = undefined;
+    // Clear the mock ID from storage
+    localStorage.removeItem('fabric_toolbox_stripe_customer');
+  }
 
   try {
     const { url } = await createCheckoutSession(email, customerId);
