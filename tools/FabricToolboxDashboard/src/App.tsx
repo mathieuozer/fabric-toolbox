@@ -198,7 +198,7 @@ const AuthButton = () => {
             background: '#22C55E',
             borderRadius: '50%',
           }} />
-          <span style={{ fontSize: '12px', color: '#22C55E' }}>{user.name}</span>
+          <span style={{ fontSize: '12px', color: '#16a34a' }}>{user.name}</span>
         </div>
         <button
           onClick={logout}
@@ -237,7 +237,7 @@ const AuthButton = () => {
           placeholder="Client ID"
           style={{
             padding: '4px 8px',
-            background: 'rgba(0,0,0,0.2)',
+            background: 'rgba(43,142,195,0.06)',
             border: '1px solid rgba(43,142,195,0.2)',
             borderRadius: '4px',
             color: '#1a1a2e',
@@ -252,7 +252,7 @@ const AuthButton = () => {
           placeholder="Tenant ID"
           style={{
             padding: '4px 8px',
-            background: 'rgba(0,0,0,0.2)',
+            background: 'rgba(43,142,195,0.06)',
             border: '1px solid rgba(43,142,195,0.2)',
             borderRadius: '4px',
             color: '#1a1a2e',
@@ -416,7 +416,7 @@ const ExecutionPanel = ({
             background: 'rgba(34,197,94,0.2)',
             border: '1px solid rgba(34,197,94,0.3)',
             borderRadius: '8px',
-            color: '#22C55E',
+            color: '#16a34a',
             fontSize: '14px',
             cursor: 'pointer',
           }}
@@ -427,12 +427,12 @@ const ExecutionPanel = ({
 
       {showInstructions && (
         <div style={{
-          background: 'rgba(0,0,0,0.2)',
+          background: 'rgba(43,142,195,0.06)',
           borderRadius: '8px',
           padding: '16px',
           marginBottom: '16px',
         }}>
-          <h4 style={{ color: '#22C55E', fontSize: '13px', marginBottom: '12px' }}>
+          <h4 style={{ color: '#16a34a', fontSize: '13px', marginBottom: '12px' }}>
             {platform === 'mac' ? '🍎 macOS' : platform === 'windows' ? '🪟 Windows' : '🐧 Linux'} Instructions:
           </h4>
           <ol style={{ margin: 0, paddingLeft: '20px', color: '#334155', fontSize: '13px' }}>
@@ -461,7 +461,7 @@ const ExecutionPanel = ({
             border: '1px solid rgba(34,197,94,0.3)',
             borderRadius: '4px',
             padding: '4px 10px',
-            color: '#22C55E',
+            color: '#16a34a',
             fontSize: '11px',
             cursor: 'pointer',
           }}
@@ -823,8 +823,8 @@ const ConfigPanel = ({
         style={{
           width: '600px',
           height: '100%',
-          background: '#0a0a0b',
-          borderLeft: '1px solid rgba(43,142,195,0.2)',
+          background: '#FFFFFF',
+          borderLeft: '1px solid #e2e8f0',
           display: 'flex',
           flexDirection: 'column',
           animation: 'slideIn 150ms ease-out',
@@ -1166,7 +1166,7 @@ const ConfigPanel = ({
                             display: 'flex',
                             alignItems: 'center',
                             gap: '8px',
-                            background: 'rgba(0,0,0,0.3)',
+                            background: 'rgba(43,142,195,0.08)',
                             padding: '8px 12px',
                             borderRadius: '4px',
                           }}>
@@ -1334,7 +1334,7 @@ const ConfigPanel = ({
                       style={{
                         width: '100%',
                         padding: '10px 12px',
-                        background: 'rgba(0,0,0,0.2)',
+                        background: 'rgba(43,142,195,0.06)',
                         border: '1px solid rgba(43,142,195,0.2)',
                         borderRadius: '6px',
                         color: '#1a1a2e',
@@ -1360,7 +1360,7 @@ const ConfigPanel = ({
                       style={{
                         width: '100%',
                         padding: '10px 12px',
-                        background: 'rgba(0,0,0,0.2)',
+                        background: 'rgba(43,142,195,0.06)',
                         border: '1px solid rgba(43,142,195,0.2)',
                         borderRadius: '6px',
                         color: '#1a1a2e',
@@ -1697,8 +1697,8 @@ const InfrastructureBuilderPanel = ({
         style={{
           width: '560px',
           height: '100%',
-          background: '#0a0a0b',
-          borderLeft: '1px solid rgba(34,197,94,0.2)',
+          background: '#FFFFFF',
+          borderLeft: '1px solid #e2e8f0',
           display: 'flex',
           flexDirection: 'column',
           animation: 'slideIn 150ms ease-out',
@@ -1773,7 +1773,7 @@ const InfrastructureBuilderPanel = ({
                 background: 'rgba(34,197,94,0.1)',
                 border: '1px solid rgba(34,197,94,0.2)',
                 borderRadius: '6px',
-                color: '#22C55E',
+                color: '#16a34a',
                 cursor: 'pointer',
                 fontSize: '12px',
                 padding: '6px 12px',
@@ -1787,7 +1787,7 @@ const InfrastructureBuilderPanel = ({
                 background: 'rgba(34,197,94,0.1)',
                 border: '1px solid rgba(34,197,94,0.2)',
                 borderRadius: '6px',
-                color: '#22C55E',
+                color: '#16a34a',
                 cursor: 'pointer',
                 fontSize: '14px',
                 padding: '6px 10px',
@@ -1853,7 +1853,7 @@ const InfrastructureBuilderPanel = ({
                     }}>
                       <span style={{
                         fontSize: '12px',
-                        color: '#22C55E',
+                        color: '#16a34a',
                         fontWeight: 600,
                       }}>
                         {msg.scriptFormat === 'powershell' ? 'PowerShell Script' : msg.scriptFormat === 'bicep' ? 'Bicep Template' : 'Terraform Config'}
@@ -1868,7 +1868,7 @@ const InfrastructureBuilderPanel = ({
                             border: '1px solid rgba(34,197,94,0.3)',
                             borderRadius: '4px',
                             padding: '4px 8px',
-                            color: '#22C55E',
+                            color: '#16a34a',
                             fontSize: '11px',
                             cursor: 'pointer',
                           }}
@@ -1893,7 +1893,7 @@ const InfrastructureBuilderPanel = ({
                     </div>
                     <pre
                       style={{
-                        background: 'rgba(0,0,0,0.4)',
+                        background: 'rgba(43,142,195,0.1)',
                         border: '1px solid rgba(34,197,94,0.2)',
                         borderRadius: '8px',
                         padding: '12px',
@@ -2112,7 +2112,7 @@ const InfrastructureBuilderPanel = ({
                       <span style={{
                         fontSize: '12px',
                         fontWeight: 600,
-                        color: locked ? '#6B7280' : '#22C55E',
+                        color: locked ? '#6B7280' : '#16a34a',
                       }}>
                         {template.name}
                       </span>
@@ -2156,7 +2156,7 @@ const InfrastructureBuilderPanel = ({
                       background: 'rgba(34,197,94,0.1)',
                       border: '1px solid rgba(34,197,94,0.2)',
                       borderRadius: '16px',
-                      color: '#22C55E',
+                      color: '#16a34a',
                       fontSize: '12px',
                       cursor: 'pointer',
                     }}
@@ -2192,7 +2192,7 @@ const InfrastructureBuilderPanel = ({
                 <div style={{
                   fontSize: '18px',
                   fontWeight: 600,
-                  color: '#22C55E',
+                  color: '#16a34a',
                 }}>
                   ~${costEstimate.monthlyTotal.toLocaleString()}
                 </div>
@@ -2216,7 +2216,7 @@ const InfrastructureBuilderPanel = ({
         <div style={{
           position: 'fixed',
           inset: 0,
-          background: 'rgba(0,0,0,0.8)',
+          background: '#1e293b',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
@@ -2386,8 +2386,8 @@ const AIChatPanel = ({
         style={{
           width: '480px',
           height: '100%',
-          background: '#0a0a0b',
-          borderLeft: '1px solid rgba(43,142,195,0.2)',
+          background: '#FFFFFF',
+          borderLeft: '1px solid #e2e8f0',
           display: 'flex',
           flexDirection: 'column',
           animation: 'slideIn 150ms ease-out',
@@ -2556,7 +2556,7 @@ const AIChatPanel = ({
                         sendMessage(ex.query);
                       }}
                       style={{
-                        background: 'rgba(0,0,0,0.2)',
+                        background: 'rgba(43,142,195,0.06)',
                         borderRadius: '8px',
                         padding: '10px 12px',
                         cursor: 'pointer',
