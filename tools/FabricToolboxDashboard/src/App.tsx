@@ -9,7 +9,7 @@ import { ExtractedConfig, EXAMPLE_QUERIES } from './services/llmService';
 import { downloadDeploymentZip } from './services/deployService';
 import { addExecutionRecord } from './services/executionTrackingService';
 import { InfraMessage, ScriptFormat } from './services/infrastructureService';
-import { mockUpgrade, isStripeConfigured, redirectToCheckout } from './services/stripeService';
+import { redirectToCheckout } from './services/stripeService';
 
 // Auth Button Component
 const AuthButton = () => {
@@ -2136,15 +2136,11 @@ const InfrastructureBuilderPanel = ({
 
             <button
               onClick={() => {
-                if (isStripeConfigured()) {
-                  // Production: redirect to Stripe checkout
-                  redirectToCheckout().catch(console.error);
-                } else {
-                  // Development: use mock upgrade
-                  const stripeData = mockUpgrade();
-                  handleUpgrade(stripeData);
-                  setShowUpgradeModal(false);
-                }
+                // Redirect to Stripe checkout
+                redirectToCheckout().catch((err) => {
+                  console.error('Checkout failed:', err);
+                  alert('Failed to start checkout. Please try again.');
+                });
               }}
               style={{
                 width: '100%',
@@ -2159,7 +2155,7 @@ const InfrastructureBuilderPanel = ({
                 marginBottom: '12px',
               }}
             >
-              {isStripeConfigured() ? 'Upgrade Now' : 'Upgrade Now (Dev Mode)'}
+              Upgrade Now - $15/month
             </button>
             <button
               onClick={() => setShowUpgradeModal(false)}

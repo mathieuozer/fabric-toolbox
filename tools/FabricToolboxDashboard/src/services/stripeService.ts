@@ -66,7 +66,7 @@ export async function createCheckoutSession(
   email?: string,
   customerId?: string
 ): Promise<CheckoutSessionResponse> {
-  const response = await fetch(`${API_BASE_URL}/stripe/create-checkout-session`, {
+  const response = await fetch(`${API_BASE_URL}/create-checkout-session`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -94,7 +94,7 @@ export async function createCheckoutSession(
 export async function createCustomerPortalSession(
   customerId: string
 ): Promise<CustomerPortalResponse> {
-  const response = await fetch(`${API_BASE_URL}/stripe/create-portal-session`, {
+  const response = await fetch(`${API_BASE_URL}/create-portal-session`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -119,7 +119,7 @@ export async function createCustomerPortalSession(
 export async function getSubscriptionStatus(
   customerId: string
 ): Promise<SubscriptionStatus> {
-  const response = await fetch(`${API_BASE_URL}/stripe/subscription-status?customerId=${customerId}`, {
+  const response = await fetch(`${API_BASE_URL}/subscription-status?customerId=${customerId}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -140,7 +140,7 @@ export async function getSubscriptionStatus(
 export async function verifyCheckoutSession(
   sessionId: string
 ): Promise<SubscriptionStatus & { customerId: string }> {
-  const response = await fetch(`${API_BASE_URL}/stripe/verify-session?sessionId=${sessionId}`, {
+  const response = await fetch(`${API_BASE_URL}/verify-session?sessionId=${sessionId}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
