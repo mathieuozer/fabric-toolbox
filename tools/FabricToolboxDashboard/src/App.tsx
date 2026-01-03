@@ -11,6 +11,161 @@ import { addExecutionRecord } from './services/executionTrackingService';
 import { InfraMessage, ScriptFormat } from './services/infrastructureService';
 import { redirectToCheckout } from './services/stripeService';
 
+// SVG Icons
+const Icons = {
+  config: (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="12" cy="12" r="3"/>
+      <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+    </svg>
+  ),
+  play: (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <polygon points="5 3 19 12 5 21 5 3"/>
+    </svg>
+  ),
+  rocket: (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/>
+      <path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/>
+      <path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/>
+      <path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/>
+    </svg>
+  ),
+  copy: (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <rect width="14" height="14" x="8" y="8" rx="2" ry="2"/>
+      <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/>
+    </svg>
+  ),
+  lock: (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <rect width="18" height="11" x="3" y="11" rx="2" ry="2"/>
+      <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+    </svg>
+  ),
+  python: (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M14.25.18l.9.2.73.26.59.3.45.32.34.34.25.34.16.33.1.3.04.26.02.2-.01.13V8.5l-.05.63-.13.55-.21.46-.26.38-.3.31-.33.25-.35.19-.35.14-.33.1-.3.07-.26.04-.21.02H8.77l-.69.05-.59.14-.5.22-.41.27-.33.32-.27.35-.2.36-.15.37-.1.35-.07.32-.04.27-.02.21v3.06H3.17l-.21-.03-.28-.07-.32-.12-.35-.18-.36-.26-.36-.36-.35-.46-.32-.59-.28-.73-.21-.88-.14-1.05-.05-1.23.06-1.22.16-1.04.24-.87.32-.71.36-.57.4-.44.42-.33.42-.24.4-.16.36-.1.32-.05.24-.01h.16l.06.01h8.16v-.83H6.18l-.01-2.75-.02-.37.05-.34.11-.31.17-.28.25-.26.31-.23.38-.2.44-.18.51-.15.58-.12.64-.1.71-.06.77-.04.84-.02 1.27.05zm-6.3 1.98l-.23.33-.08.41.08.41.23.34.33.22.41.09.41-.09.33-.22.23-.34.08-.41-.08-.41-.23-.33-.33-.22-.41-.09-.41.09zm13.09 3.95l.28.06.32.12.35.18.36.27.36.35.35.47.32.59.28.73.21.88.14 1.04.05 1.23-.06 1.23-.16 1.04-.24.86-.32.71-.36.57-.4.45-.42.33-.42.24-.4.16-.36.09-.32.05-.24.02-.16-.01h-8.22v.82h5.84l.01 2.76.02.36-.05.34-.11.31-.17.29-.25.25-.31.24-.38.2-.44.17-.51.15-.58.13-.64.09-.71.07-.77.04-.84.01-1.27-.04-1.07-.14-.9-.2-.73-.25-.59-.3-.45-.33-.34-.34-.25-.34-.16-.33-.1-.3-.04-.25-.02-.2.01-.13v-5.34l.05-.64.13-.54.21-.46.26-.38.3-.32.33-.24.35-.2.35-.14.33-.1.3-.06.26-.04.21-.02.13-.01h5.84l.69-.05.59-.14.5-.21.41-.28.33-.32.27-.35.2-.36.15-.36.1-.35.07-.32.04-.28.02-.21V6.07h2.09l.14.01zm-6.47 14.25l-.23.33-.08.41.08.41.23.33.33.23.41.08.41-.08.33-.23.23-.33.08-.41-.08-.41-.23-.33-.33-.23-.41-.08-.41.08z"/>
+    </svg>
+  ),
+  zap: (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+    </svg>
+  ),
+  notebook: (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+      <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+    </svg>
+  ),
+  database: (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <ellipse cx="12" cy="5" rx="9" ry="3"/>
+      <path d="M3 5V19A9 3 0 0 0 21 19V5"/>
+      <path d="M3 12A9 3 0 0 0 21 12"/>
+    </svg>
+  ),
+  chart: (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <line x1="18" x2="18" y1="20" y2="10"/>
+      <line x1="12" x2="12" y1="20" y2="4"/>
+      <line x1="6" x2="6" y1="20" y2="14"/>
+    </svg>
+  ),
+  code: (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <polyline points="16 18 22 12 16 6"/>
+      <polyline points="8 6 2 12 8 18"/>
+    </svg>
+  ),
+  terminal: (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <polyline points="4 17 10 11 4 5"/>
+      <line x1="12" x2="20" y1="19" y2="19"/>
+    </svg>
+  ),
+  box: (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/>
+      <path d="m3.3 7 8.7 5 8.7-5"/>
+      <path d="M12 22V12"/>
+    </svg>
+  ),
+  check: (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <polyline points="20 6 9 17 4 12"/>
+    </svg>
+  ),
+  x: (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M18 6 6 18"/>
+      <path d="m6 6 12 12"/>
+    </svg>
+  ),
+  search: (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="11" cy="11" r="8"/>
+      <path d="m21 21-4.3-4.3"/>
+    </svg>
+  ),
+  download: (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+      <polyline points="7 10 12 15 17 10"/>
+      <line x1="12" x2="12" y1="15" y2="3"/>
+    </svg>
+  ),
+  send: (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="m22 2-7 20-4-9-9-4Z"/>
+      <path d="M22 2 11 13"/>
+    </svg>
+  ),
+  sparkles: (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/>
+      <path d="M5 3v4"/>
+      <path d="M19 17v4"/>
+      <path d="M3 5h4"/>
+      <path d="M17 19h4"/>
+    </svg>
+  ),
+  file: (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/>
+      <path d="M14 2v4a2 2 0 0 0 2 2h4"/>
+    </svg>
+  ),
+  fileText: (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/>
+      <path d="M14 2v4a2 2 0 0 0 2 2h4"/>
+      <path d="M10 9H8"/>
+      <path d="M16 13H8"/>
+      <path d="M16 17H8"/>
+    </svg>
+  ),
+  link: (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+      <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+    </svg>
+  ),
+};
+
+// Type icon mapping using SVG icons
+const TYPE_ICON_COMPONENTS: Record<string, JSX.Element> = {
+  python: Icons.python,
+  powershell: Icons.zap,
+  notebook: Icons.notebook,
+  sql: Icons.database,
+  powerbi: Icons.chart,
+  typescript: Icons.code,
+  cli: Icons.terminal,
+};
+
 // Auth Button Component
 const AuthButton = () => {
   const { isAuthenticated, isLoading, user, login, logout, config, initialize } = useAuth();
@@ -85,7 +240,7 @@ const AuthButton = () => {
             background: 'rgba(0,0,0,0.2)',
             border: '1px solid rgba(43,142,195,0.2)',
             borderRadius: '4px',
-            color: '#FEFEFE',
+            color: '#1a1a2e',
             fontSize: '11px',
             width: '120px',
           }}
@@ -100,7 +255,7 @@ const AuthButton = () => {
             background: 'rgba(0,0,0,0.2)',
             border: '1px solid rgba(43,142,195,0.2)',
             borderRadius: '4px',
-            color: '#FEFEFE',
+            color: '#1a1a2e',
             fontSize: '11px',
             width: '120px',
           }}
@@ -112,7 +267,7 @@ const AuthButton = () => {
             border: 'none',
             borderRadius: '4px',
             padding: '4px 10px',
-            color: '#FEFEFE',
+            color: '#FFFFFF',
             fontSize: '11px',
             cursor: 'pointer',
           }}
@@ -152,7 +307,7 @@ const AuthButton = () => {
         cursor: 'pointer',
       }}
     >
-      <span>🔐</span>
+      <span style={{ display: 'flex', alignItems: 'center' }}>{Icons.lock}</span>
       <span>{isLoading ? 'Connecting...' : 'Sign In'}</span>
     </button>
   );
@@ -210,21 +365,21 @@ const ExecutionPanel = ({
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          fontSize: '20px',
+          color: '#FFFFFF',
         }}>
-          ▶️
+          {Icons.play}
         </div>
         <div>
           <h3 style={{
             fontFamily: "'Plus Jakarta Sans', sans-serif",
             fontSize: '15px',
             fontWeight: 600,
-            color: '#FEFEFE',
+            color: '#1a1a2e',
             margin: 0,
           }}>
             Execute Now
           </h3>
-          <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.6)', margin: '2px 0 0' }}>
+          <p style={{ fontSize: '12px', color: '#64748b', margin: '2px 0 0' }}>
             Copy command and run in your terminal
           </p>
         </div>
@@ -243,13 +398,16 @@ const ExecutionPanel = ({
             background: '#22C55E',
             border: 'none',
             borderRadius: '8px',
-            color: '#FEFEFE',
+            color: '#FFFFFF',
             fontSize: '14px',
             fontWeight: 600,
             cursor: 'pointer',
           }}
         >
-          {copied ? '✓ Copied!' : '📋 Copy Command'}
+          <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+            {copied ? Icons.check : Icons.copy}
+            <span>{copied ? 'Copied!' : 'Copy Command'}</span>
+          </span>
         </button>
         <button
           onClick={() => setShowInstructions(!showInstructions)}
@@ -277,7 +435,7 @@ const ExecutionPanel = ({
           <h4 style={{ color: '#22C55E', fontSize: '13px', marginBottom: '12px' }}>
             {platform === 'mac' ? '🍎 macOS' : platform === 'windows' ? '🪟 Windows' : '🐧 Linux'} Instructions:
           </h4>
-          <ol style={{ margin: 0, paddingLeft: '20px', color: 'rgba(255,255,255,0.8)', fontSize: '13px' }}>
+          <ol style={{ margin: 0, paddingLeft: '20px', color: '#334155', fontSize: '13px' }}>
             <li style={{ marginBottom: '8px' }}>
               Open {platform === 'mac' ? 'Terminal (Cmd + Space, type "Terminal")' :
                      platform === 'windows' ? 'PowerShell (Win + X)' : 'Terminal (Ctrl + Alt + T)'}
@@ -295,7 +453,7 @@ const ExecutionPanel = ({
         paddingTop: '12px',
         borderTop: '1px solid rgba(34,197,94,0.2)',
       }}>
-        <span style={{ fontSize: '12px', color: 'rgba(255,255,255,0.5)' }}>After running:</span>
+        <span style={{ fontSize: '12px', color: '#94a3b8' }}>After running:</span>
         <button
           onClick={() => handleMarkExecuted(true)}
           style={{
@@ -308,7 +466,7 @@ const ExecutionPanel = ({
             cursor: 'pointer',
           }}
         >
-          ✓ Completed
+          <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>{Icons.check} Completed</span>
         </button>
         <button
           onClick={() => handleMarkExecuted(false)}
@@ -322,7 +480,7 @@ const ExecutionPanel = ({
             cursor: 'pointer',
           }}
         >
-          ✗ Failed
+          <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>{Icons.x} Failed</span>
         </button>
       </div>
     </div>
@@ -337,15 +495,6 @@ const CATEGORIES = [
   { id: 'tools', label: 'Tools', icon: '⚙' },
 ];
 
-const TYPE_ICONS: Record<string, string> = {
-  python: '🐍',
-  powershell: '⚡',
-  notebook: '📓',
-  sql: '🗃️',
-  powerbi: '📊',
-  typescript: '📘',
-  cli: '💻',
-};
 
 // Tag component
 const Tag = ({ label }: { label: string }) => {
@@ -405,11 +554,13 @@ const ToolCard = ({ tool, onClick, style }: { tool: ToolManifest; onClick: (tool
       }} />
 
       <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
-        <span style={{ fontSize: '16px' }}>{TYPE_ICONS[tool.type] || '📦'}</span>
+        <span style={{ fontSize: '16px', color: '#2B8EC3', display: 'flex', alignItems: 'center' }}>
+          {TYPE_ICON_COMPONENTS[tool.type] || Icons.box}
+        </span>
         <div style={{
           fontFamily: "'Plus Jakarta Sans', sans-serif",
           fontSize: '15px',
-          color: '#FEFEFE',
+          color: '#1a1a2e',
           fontWeight: 600,
           letterSpacing: '-0.01em',
         }}>
@@ -419,7 +570,7 @@ const ToolCard = ({ tool, onClick, style }: { tool: ToolManifest; onClick: (tool
 
       <div style={{
         fontSize: '14px',
-        color: 'rgba(255,255,255,0.6)',
+        color: '#64748b',
         lineHeight: 1.5,
         marginBottom: '12px',
         fontFamily: "'Inter', sans-serif",
@@ -504,7 +655,7 @@ const CommandPalette = ({ isOpen, onClose, onSelect }: {
         style={{
           width: '560px',
           maxHeight: '480px',
-          background: '#101012',
+          background: '#F8FAFC',
           border: '1px solid rgba(43,142,195,0.2)',
           borderRadius: '12px',
           overflow: 'hidden',
@@ -529,7 +680,7 @@ const CommandPalette = ({ isOpen, onClose, onSelect }: {
               border: 'none',
               outline: 'none',
               padding: '18px 0',
-              color: '#FEFEFE',
+              color: '#1a1a2e',
               fontSize: '15px',
               fontFamily: "'Inter', sans-serif",
             }}
@@ -561,19 +712,19 @@ const CommandPalette = ({ isOpen, onClose, onSelect }: {
               }}
             >
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
-                <span>{TYPE_ICONS[tool.type] || '📦'}</span>
+                <span style={{ color: '#2B8EC3', display: 'flex', alignItems: 'center' }}>{TYPE_ICON_COMPONENTS[tool.type] || Icons.box}</span>
                 <span style={{
                   fontFamily: "'Plus Jakarta Sans', sans-serif",
                   fontSize: '14px',
                   fontWeight: 600,
-                  color: '#FEFEFE',
+                  color: '#1a1a2e',
                 }}>
                   {tool.name}
                 </span>
               </div>
               <div style={{
                 fontSize: '13px',
-                color: 'rgba(255,255,255,0.5)',
+                color: '#94a3b8',
                 display: 'flex',
                 alignItems: 'center',
                 gap: '8px',
@@ -598,7 +749,7 @@ const CommandPalette = ({ isOpen, onClose, onSelect }: {
             <div style={{
               padding: '40px 16px',
               textAlign: 'center',
-              color: 'rgba(255,255,255,0.3)',
+              color: '#94a3b8',
               fontSize: '13px',
             }}>
               No tools found
@@ -703,7 +854,7 @@ const ConfigPanel = ({
           </button>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
-            <span style={{ fontSize: '24px' }}>{TYPE_ICONS[tool.type] || '📦'}</span>
+            <span style={{ fontSize: '24px', color: '#2B8EC3', display: 'flex', alignItems: 'center' }}>{TYPE_ICON_COMPONENTS[tool.type] || Icons.box}</span>
             <div>
               <div style={{
                 fontFamily: "'Plus Jakarta Sans', sans-serif",
@@ -719,7 +870,7 @@ const ConfigPanel = ({
               <h2 style={{
                 fontFamily: "'Plus Jakarta Sans', sans-serif",
                 fontSize: '22px',
-                color: '#FEFEFE',
+                color: '#1a1a2e',
                 fontWeight: 700,
                 margin: 0,
               }}>
@@ -733,7 +884,7 @@ const ConfigPanel = ({
           </div>
 
           <p style={{
-            color: 'rgba(255,255,255,0.7)',
+            color: '#475569',
             fontSize: '14px',
             lineHeight: 1.6,
             margin: 0,
@@ -788,7 +939,7 @@ const ConfigPanel = ({
                 background: 'transparent',
                 border: 'none',
                 borderBottom: activeTab === tab ? '2px solid #2B8EC3' : '2px solid transparent',
-                color: activeTab === tab ? '#FEFEFE' : 'rgba(255,255,255,0.5)',
+                color: activeTab === tab ? '#1a1a2e' : '#64748b',
                 fontSize: '13px',
                 fontFamily: "'Plus Jakarta Sans', sans-serif",
                 fontWeight: 600,
@@ -796,7 +947,10 @@ const ConfigPanel = ({
                 textTransform: 'capitalize',
               }}
             >
-              {tab === 'config' ? '⚙️ Configure' : tab === 'run' ? '▶️ Run' : '🚀 Deploy'}
+              <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                {tab === 'config' ? Icons.config : tab === 'run' ? Icons.play : Icons.rocket}
+                <span>{tab === 'config' ? 'Configure' : tab === 'run' ? 'Run' : 'Deploy'}</span>
+              </span>
             </button>
           ))}
         </div>
@@ -832,7 +986,7 @@ const ConfigPanel = ({
                         alignItems: 'center',
                       }}
                     >
-                      <span style={{ color: '#FEFEFE', fontSize: '13px' }}>{p.name}</span>
+                      <span style={{ color: '#1a1a2e', fontSize: '13px' }}>{p.name}</span>
                       {p.installCmd && (
                         <button
                           onClick={() => copyToClipboard(p.installCmd!, p.name)}
@@ -891,7 +1045,7 @@ const ConfigPanel = ({
                         gap: '8px',
                         marginBottom: '6px',
                         fontSize: '13px',
-                        color: '#FEFEFE',
+                        color: '#1a1a2e',
                         fontFamily: "'Inter', sans-serif",
                       }}>
                         {c.name}
@@ -899,7 +1053,7 @@ const ConfigPanel = ({
                       </label>
                       <p style={{
                         fontSize: '12px',
-                        color: 'rgba(255,255,255,0.5)',
+                        color: '#94a3b8',
                         marginBottom: '8px',
                       }}>
                         {c.description}
@@ -914,7 +1068,7 @@ const ConfigPanel = ({
                             background: 'rgba(43,142,195,0.05)',
                             border: '1px solid rgba(43,142,195,0.2)',
                             borderRadius: '6px',
-                            color: '#FEFEFE',
+                            color: '#1a1a2e',
                             fontSize: '13px',
                             outline: 'none',
                           }}
@@ -936,7 +1090,7 @@ const ConfigPanel = ({
                             background: 'rgba(43,142,195,0.05)',
                             border: '1px solid rgba(43,142,195,0.2)',
                             borderRadius: '6px',
-                            color: '#FEFEFE',
+                            color: '#1a1a2e',
                             fontSize: '13px',
                             outline: 'none',
                           }}
@@ -988,21 +1142,21 @@ const ConfigPanel = ({
                         justifyContent: 'center',
                         fontSize: '12px',
                         fontWeight: 700,
-                        color: '#FEFEFE',
+                        color: '#FFFFFF',
                         flexShrink: 0,
                       }}>
                         {r.step}
                       </div>
                       <div style={{ flex: 1 }}>
                         <p style={{
-                          color: '#FEFEFE',
+                          color: '#1a1a2e',
                           fontSize: '14px',
                           margin: 0,
                           marginBottom: r.command ? '8px' : 0,
                         }}>
                           {r.description}
                           {r.isOptional && (
-                            <span style={{ color: 'rgba(255,255,255,0.4)', marginLeft: '8px' }}>
+                            <span style={{ color: '#94a3b8', marginLeft: '8px' }}>
                               (optional)
                             </span>
                           )}
@@ -1048,7 +1202,7 @@ const ConfigPanel = ({
                 <div style={{ marginTop: '24px' }}>
                   <h4 style={{
                     fontSize: '12px',
-                    color: 'rgba(255,255,255,0.5)',
+                    color: '#94a3b8',
                     textTransform: 'uppercase',
                     marginBottom: '8px',
                   }}>
@@ -1090,22 +1244,22 @@ const ConfigPanel = ({
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    fontSize: '24px',
+                    color: '#FFFFFF',
                   }}>
-                    📦
+                    {Icons.download}
                   </div>
                   <div style={{ flex: 1 }}>
                     <h3 style={{
                       fontFamily: "'Plus Jakarta Sans', sans-serif",
                       fontSize: '16px',
                       fontWeight: 600,
-                      color: '#FEFEFE',
+                      color: '#1a1a2e',
                       margin: 0,
                     }}>
                       Download Deployment Package
                     </h3>
                     <p style={{
-                      color: 'rgba(255,255,255,0.6)',
+                      color: '#64748b',
                       fontSize: '13px',
                       margin: '4px 0 0',
                     }}>
@@ -1127,7 +1281,7 @@ const ConfigPanel = ({
                       border: 'none',
                       borderRadius: '8px',
                       padding: '12px 24px',
-                      color: '#FEFEFE',
+                      color: '#FFFFFF',
                       fontSize: '14px',
                       fontWeight: 600,
                       cursor: isDeploying ? 'wait' : 'pointer',
@@ -1155,7 +1309,7 @@ const ConfigPanel = ({
                     fontFamily: "'Plus Jakarta Sans', sans-serif",
                     fontSize: '14px',
                     fontWeight: 600,
-                    color: '#FEFEFE',
+                    color: '#1a1a2e',
                     margin: 0,
                   }}>
                     Push to Git Repository
@@ -1167,7 +1321,7 @@ const ConfigPanel = ({
                     <label style={{
                       display: 'block',
                       fontSize: '12px',
-                      color: 'rgba(255,255,255,0.6)',
+                      color: '#64748b',
                       marginBottom: '6px',
                     }}>
                       Repository URL
@@ -1183,7 +1337,7 @@ const ConfigPanel = ({
                         background: 'rgba(0,0,0,0.2)',
                         border: '1px solid rgba(43,142,195,0.2)',
                         borderRadius: '6px',
-                        color: '#FEFEFE',
+                        color: '#1a1a2e',
                         fontSize: '13px',
                         outline: 'none',
                       }}
@@ -1193,7 +1347,7 @@ const ConfigPanel = ({
                     <label style={{
                       display: 'block',
                       fontSize: '12px',
-                      color: 'rgba(255,255,255,0.6)',
+                      color: '#64748b',
                       marginBottom: '6px',
                     }}>
                       Branch
@@ -1209,7 +1363,7 @@ const ConfigPanel = ({
                         background: 'rgba(0,0,0,0.2)',
                         border: '1px solid rgba(43,142,195,0.2)',
                         borderRadius: '6px',
-                        color: '#FEFEFE',
+                        color: '#1a1a2e',
                         fontSize: '13px',
                         outline: 'none',
                       }}
@@ -1217,7 +1371,7 @@ const ConfigPanel = ({
                   </div>
                   <p style={{
                     fontSize: '12px',
-                    color: 'rgba(255,255,255,0.4)',
+                    color: '#94a3b8',
                     margin: '4px 0 0',
                   }}>
                     Download includes a git-push.sh script to push configs to your repo
@@ -1240,11 +1394,11 @@ const ConfigPanel = ({
 
               <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                 {[
-                  { icon: '📄', name: '.env', desc: 'Environment variables' },
-                  { icon: '🐧', name: 'run.sh', desc: 'Linux/macOS script' },
-                  { icon: '🪟', name: 'run.bat', desc: 'Windows script' },
-                  { icon: '📖', name: 'README.md', desc: 'Instructions' },
-                  ...(gitRepoUrl ? [{ icon: '🔗', name: 'git-push.sh', desc: 'Git push script' }] : []),
+                  { icon: Icons.file, name: '.env', desc: 'Environment variables' },
+                  { icon: Icons.terminal, name: 'run.sh', desc: 'Linux/macOS script' },
+                  { icon: Icons.terminal, name: 'run.bat', desc: 'Windows script' },
+                  { icon: Icons.fileText, name: 'README.md', desc: 'Instructions' },
+                  ...(gitRepoUrl ? [{ icon: Icons.link, name: 'git-push.sh', desc: 'Git push script' }] : []),
                 ].map((file, i) => (
                   <div
                     key={i}
@@ -1253,13 +1407,13 @@ const ConfigPanel = ({
                       alignItems: 'center',
                       gap: '12px',
                       padding: '10px 14px',
-                      background: 'rgba(0,0,0,0.2)',
+                      background: 'rgba(43,142,195,0.05)',
                       borderRadius: '6px',
                     }}
                   >
-                    <span style={{ fontSize: '16px' }}>{file.icon}</span>
-                    <code style={{ color: '#AAD1E7', fontSize: '13px', flex: 1 }}>{file.name}</code>
-                    <span style={{ color: 'rgba(255,255,255,0.4)', fontSize: '12px' }}>{file.desc}</span>
+                    <span style={{ color: '#2B8EC3', display: 'flex', alignItems: 'center' }}>{file.icon}</span>
+                    <code style={{ color: '#2B8EC3', fontSize: '13px', flex: 1 }}>{file.name}</code>
+                    <span style={{ color: '#64748b', fontSize: '12px' }}>{file.desc}</span>
                   </div>
                 ))}
               </div>
@@ -1268,7 +1422,7 @@ const ConfigPanel = ({
               <div style={{ marginTop: '20px', paddingTop: '16px', borderTop: '1px solid rgba(43,142,195,0.1)' }}>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                   <div>
-                    <span style={{ color: 'rgba(255,255,255,0.5)', fontSize: '12px' }}>Tool source files: </span>
+                    <span style={{ color: '#94a3b8', fontSize: '12px' }}>Tool source files: </span>
                     <code style={{ color: '#AAD1E7', fontSize: '12px' }}>{tool.path}</code>
                   </div>
                   <button
@@ -1312,7 +1466,7 @@ const MarkdownText = ({ text }: { text: string }) => {
     const rendered = parts.map((part, i) => {
       if (part.startsWith('**') && part.endsWith('**')) {
         return (
-          <strong key={i} style={{ color: '#FEFEFE', fontWeight: 600 }}>
+          <strong key={i} style={{ color: '#1a1a2e', fontWeight: 600 }}>
             {part.slice(2, -2)}
           </strong>
         );
@@ -1370,7 +1524,7 @@ const MarkdownText = ({ text }: { text: string }) => {
       return (
         <div key={idx} style={{
           fontWeight: 600,
-          color: '#FEFEFE',
+          color: '#1a1a2e',
           fontSize: '15px',
           marginTop: '12px',
           marginBottom: '8px',
@@ -1384,7 +1538,7 @@ const MarkdownText = ({ text }: { text: string }) => {
       return (
         <div key={idx} style={{
           fontWeight: 700,
-          color: '#FEFEFE',
+          color: '#1a1a2e',
           fontSize: '16px',
           marginTop: '12px',
           marginBottom: '8px',
@@ -1575,7 +1729,7 @@ const InfrastructureBuilderPanel = ({
               <h2 style={{
                 fontFamily: "'Plus Jakarta Sans', sans-serif",
                 fontSize: '16px',
-                color: '#FEFEFE',
+                color: '#1a1a2e',
                 fontWeight: 600,
                 margin: 0,
               }}>
@@ -1584,7 +1738,7 @@ const InfrastructureBuilderPanel = ({
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <p style={{
                   fontSize: '12px',
-                  color: 'rgba(255,255,255,0.5)',
+                  color: '#94a3b8',
                   margin: 0,
                 }}>
                   AI-powered Fabric environment setup
@@ -1595,7 +1749,7 @@ const InfrastructureBuilderPanel = ({
                   borderRadius: '10px',
                   fontSize: '10px',
                   fontWeight: 600,
-                  color: '#FEFEFE',
+                  color: '#1a1a2e',
                 }}>
                   {tierDisplayName}
                 </span>
@@ -1607,7 +1761,7 @@ const InfrastructureBuilderPanel = ({
             {!isProUser && (
               <div style={{
                 fontSize: '11px',
-                color: remainingGenerations === 0 ? '#EF4444' : 'rgba(255,255,255,0.5)',
+                color: remainingGenerations === 0 ? '#EF4444' : '#64748b',
               }}>
                 {usageDisplay} · Resets in {daysUntilReset}d
               </div>
@@ -1676,7 +1830,7 @@ const InfrastructureBuilderPanel = ({
                   style={{
                     fontSize: '14px',
                     lineHeight: 1.6,
-                    color: msg.role === 'user' ? '#FEFEFE' : 'rgba(255,255,255,0.9)',
+                    color: msg.role === 'user' ? '#1a1a2e' : '#334155',
                     whiteSpace: 'pre-wrap',
                   }}
                   dangerouslySetInnerHTML={{
@@ -1728,7 +1882,7 @@ const InfrastructureBuilderPanel = ({
                             border: 'none',
                             borderRadius: '4px',
                             padding: '4px 8px',
-                            color: '#FEFEFE',
+                            color: '#FFFFFF',
                             fontSize: '11px',
                             cursor: 'pointer',
                           }}
@@ -1747,7 +1901,7 @@ const InfrastructureBuilderPanel = ({
                         lineHeight: 1.4,
                         overflow: 'auto',
                         maxHeight: '300px',
-                        color: 'rgba(255,255,255,0.8)',
+                        color: '#334155',
                         fontFamily: 'monospace',
                       }}
                     >
@@ -1768,7 +1922,7 @@ const InfrastructureBuilderPanel = ({
                           border: '1px solid rgba(34,197,94,0.3)',
                           borderRadius: '4px',
                           padding: '6px 12px',
-                          color: msg.scriptFormat === 'powershell' ? '#FEFEFE' : '#22C55E',
+                          color: msg.scriptFormat === 'powershell' ? '#1a1a2e' : '#22C55E',
                           fontSize: '12px',
                           cursor: 'pointer',
                         }}
@@ -1786,7 +1940,7 @@ const InfrastructureBuilderPanel = ({
                           padding: '6px 12px',
                           color: isFormatLocked('bicep')
                             ? '#6B7280'
-                            : msg.scriptFormat === 'bicep' ? '#FEFEFE' : '#22C55E',
+                            : msg.scriptFormat === 'bicep' ? '#1a1a2e' : '#22C55E',
                           fontSize: '12px',
                           cursor: 'pointer',
                         }}
@@ -1804,7 +1958,7 @@ const InfrastructureBuilderPanel = ({
                           padding: '6px 12px',
                           color: isFormatLocked('terraform')
                             ? '#6B7280'
-                            : msg.scriptFormat === 'terraform' ? '#FEFEFE' : '#22C55E',
+                            : msg.scriptFormat === 'terraform' ? '#1a1a2e' : '#22C55E',
                           fontSize: '12px',
                           cursor: 'pointer',
                         }}
@@ -1877,7 +2031,7 @@ const InfrastructureBuilderPanel = ({
                 background: 'rgba(34,197,94,0.05)',
                 border: '1px solid rgba(34,197,94,0.2)',
                 borderRadius: '8px',
-                color: '#FEFEFE',
+                color: '#1a1a2e',
                 fontSize: '14px',
                 outline: 'none',
               }}
@@ -1892,7 +2046,7 @@ const InfrastructureBuilderPanel = ({
                   : 'linear-gradient(135deg, #22C55E 0%, #16A34A 100%)',
                 border: 'none',
                 borderRadius: '8px',
-                color: '#FEFEFE',
+                color: '#1a1a2e',
                 fontSize: '14px',
                 cursor: isProcessing || !input.trim() ? 'not-allowed' : 'pointer',
               }}
@@ -1908,7 +2062,7 @@ const InfrastructureBuilderPanel = ({
               <div style={{
                 marginBottom: '12px',
                 fontSize: '11px',
-                color: 'rgba(255,255,255,0.5)',
+                color: '#94a3b8',
                 textTransform: 'uppercase',
                 letterSpacing: '0.5px',
               }}>
@@ -1965,7 +2119,7 @@ const InfrastructureBuilderPanel = ({
                     </div>
                     <div style={{
                       fontSize: '10px',
-                      color: 'rgba(255,255,255,0.5)',
+                      color: '#94a3b8',
                       lineHeight: 1.3,
                     }}>
                       {template.description}
@@ -2029,7 +2183,7 @@ const InfrastructureBuilderPanel = ({
               <div>
                 <div style={{
                   fontSize: '10px',
-                  color: 'rgba(255,255,255,0.5)',
+                  color: '#94a3b8',
                   textTransform: 'uppercase',
                   letterSpacing: '0.5px',
                 }}>
@@ -2046,7 +2200,7 @@ const InfrastructureBuilderPanel = ({
               <div style={{
                 textAlign: 'right',
                 fontSize: '10px',
-                color: 'rgba(255,255,255,0.5)',
+                color: '#94a3b8',
               }}>
                 <div>Capacity: ${costEstimate.breakdown.capacity.toLocaleString()}</div>
                 <div>Storage: ${costEstimate.breakdown.storage.toLocaleString()}</div>
@@ -2069,7 +2223,7 @@ const InfrastructureBuilderPanel = ({
           zIndex: 10001,
         }}>
           <div style={{
-            background: '#1E1E1E',
+            background: '#FFFFFF',
             border: '1px solid rgba(139,92,246,0.3)',
             borderRadius: '16px',
             padding: '32px',
@@ -2080,14 +2234,14 @@ const InfrastructureBuilderPanel = ({
             <h3 style={{
               fontSize: '20px',
               fontWeight: 600,
-              color: '#FEFEFE',
+              color: '#1a1a2e',
               margin: '0 0 8px 0',
             }}>
               Upgrade to Pro
             </h3>
             <p style={{
               fontSize: '14px',
-              color: 'rgba(255,255,255,0.6)',
+              color: '#64748b',
               margin: '0 0 24px 0',
               lineHeight: 1.5,
             }}>
@@ -2115,7 +2269,7 @@ const InfrastructureBuilderPanel = ({
               </div>
               <div style={{
                 fontSize: '12px',
-                color: 'rgba(255,255,255,0.5)',
+                color: '#94a3b8',
               }}>
                 Cancel anytime
               </div>
@@ -2124,7 +2278,7 @@ const InfrastructureBuilderPanel = ({
                 marginTop: '16px',
                 textAlign: 'left',
                 fontSize: '13px',
-                color: 'rgba(255,255,255,0.7)',
+                color: '#475569',
               }}>
                 <div style={{ marginBottom: '8px' }}>✓ All 6+ templates</div>
                 <div style={{ marginBottom: '8px' }}>✓ PowerShell, Bicep & Terraform</div>
@@ -2149,7 +2303,7 @@ const InfrastructureBuilderPanel = ({
                 background: 'linear-gradient(135deg, #8B5CF6 0%, #6366F1 100%)',
                 border: 'none',
                 borderRadius: '8px',
-                color: '#FEFEFE',
+                color: '#1a1a2e',
                 fontSize: '16px',
                 fontWeight: 600,
                 cursor: 'pointer',
@@ -2164,9 +2318,9 @@ const InfrastructureBuilderPanel = ({
                 width: '100%',
                 padding: '12px 24px',
                 background: 'transparent',
-                border: '1px solid rgba(255,255,255,0.2)',
+                border: '1px solid #e2e8f0',
                 borderRadius: '8px',
-                color: 'rgba(255,255,255,0.6)',
+                color: '#64748b',
                 fontSize: '14px',
                 cursor: 'pointer',
               }}
@@ -2264,7 +2418,7 @@ const AIChatPanel = ({
               <h2 style={{
                 fontFamily: "'Plus Jakarta Sans', sans-serif",
                 fontSize: '16px',
-                color: '#FEFEFE',
+                color: '#1a1a2e',
                 fontWeight: 600,
                 margin: 0,
               }}>
@@ -2272,7 +2426,7 @@ const AIChatPanel = ({
               </h2>
               <p style={{
                 fontSize: '12px',
-                color: 'rgba(255,255,255,0.5)',
+                color: '#94a3b8',
                 margin: 0,
               }}>
                 Describe what you need in natural language
@@ -2325,7 +2479,7 @@ const AIChatPanel = ({
                 marginBottom: '24px',
               }}>
                 <div style={{ fontSize: '28px', marginBottom: '8px' }}>✨</div>
-                <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.5)', marginBottom: '16px' }}>
+                <p style={{ fontSize: '14px', color: '#94a3b8', marginBottom: '16px' }}>
                   Describe what you need - I'll find the right tool
                 </p>
                 <div style={{
@@ -2386,7 +2540,7 @@ const AIChatPanel = ({
                 </div>
                 <p style={{
                   fontSize: '12px',
-                  color: 'rgba(255,255,255,0.5)',
+                  color: '#94a3b8',
                   marginBottom: '12px',
                   lineHeight: 1.5,
                 }}>
@@ -2456,7 +2610,7 @@ const AIChatPanel = ({
                   borderRadius: '12px 12px 4px 12px',
                   padding: '10px 14px',
                   maxWidth: '80%',
-                  color: '#FEFEFE',
+                  color: '#FFFFFF',
                   fontSize: '14px',
                 }}>
                   {entry.query}
@@ -2487,7 +2641,7 @@ const AIChatPanel = ({
                     background: 'rgba(43,142,195,0.08)',
                     borderRadius: '4px 12px 12px 12px',
                     padding: '12px 14px',
-                    color: 'rgba(255,255,255,0.9)',
+                    color: '#334155',
                     fontSize: '14px',
                   }}>
                     <MarkdownText text={entry.response} />
@@ -2516,21 +2670,21 @@ const AIChatPanel = ({
                             transition: 'all 150ms',
                           }}
                         >
-                          <span style={{ fontSize: '16px' }}>
-                            {TYPE_ICONS[rec.tool.type] || '📦'}
+                          <span style={{ fontSize: '16px', color: '#2B8EC3', display: 'flex', alignItems: 'center' }}>
+                            {TYPE_ICON_COMPONENTS[rec.tool.type] || Icons.box}
                           </span>
                           <div style={{ flex: 1 }}>
                             <div style={{
                               fontFamily: "'Plus Jakarta Sans', sans-serif",
                               fontSize: '13px',
                               fontWeight: 600,
-                              color: '#FEFEFE',
+                              color: '#1a1a2e',
                             }}>
                               {rec.tool.name}
                             </div>
                             <div style={{
                               fontSize: '11px',
-                              color: 'rgba(255,255,255,0.5)',
+                              color: '#94a3b8',
                             }}>
                               {rec.tool.category}
                             </div>
@@ -2570,7 +2724,7 @@ const AIChatPanel = ({
                 ✨
               </div>
               <div style={{
-                color: 'rgba(255,255,255,0.5)',
+                color: '#94a3b8',
                 fontSize: '14px',
               }}>
                 Thinking...
@@ -2617,7 +2771,7 @@ const AIChatPanel = ({
                 background: 'rgba(43,142,195,0.06)',
                 border: '1px solid rgba(43,142,195,0.2)',
                 borderRadius: '10px',
-                color: '#FEFEFE',
+                color: '#1a1a2e',
                 fontSize: '14px',
                 outline: 'none',
               }}
@@ -2630,7 +2784,7 @@ const AIChatPanel = ({
                 border: 'none',
                 borderRadius: '10px',
                 padding: '12px 20px',
-                color: '#FEFEFE',
+                color: '#FFFFFF',
                 fontSize: '14px',
                 fontWeight: 600,
                 cursor: isLoading || !input.trim() ? 'not-allowed' : 'pointer',
@@ -2758,7 +2912,7 @@ export default function App() {
           <button
             onClick={() => setSubscriptionMessage(null)}
             style={{
-              background: 'rgba(255,255,255,0.2)',
+              background: '#e2e8f0',
               border: 'none',
               borderRadius: '4px',
               color: 'white',
@@ -3044,7 +3198,7 @@ export default function App() {
             fontFamily: "'Plus Jakarta Sans', sans-serif",
             fontSize: '32px',
             fontWeight: 700,
-            color: '#FEFEFE',
+            color: '#1a1a2e',
             margin: 0,
             display: 'flex',
             alignItems: 'center',
