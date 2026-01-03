@@ -66,6 +66,16 @@ export async function createCheckoutSession(
   email?: string,
   customerId?: string
 ): Promise<CheckoutSessionResponse> {
+  // Debug: log config
+  console.log('Stripe config:', {
+    priceId: STRIPE_CONFIG.priceId ? 'set' : 'MISSING',
+    publishableKey: STRIPE_CONFIG.publishableKey ? 'set' : 'MISSING',
+  });
+
+  if (!STRIPE_CONFIG.priceId) {
+    throw new Error('Stripe Price ID not configured. Please contact support.');
+  }
+
   const response = await fetch(`${API_BASE_URL}/create-checkout-session`, {
     method: 'POST',
     headers: {
@@ -81,8 +91,14 @@ export async function createCheckoutSession(
   });
 
   if (!response.ok) {
-    const error = await response.json();
-    throw new Error(error.message || 'Failed to create checkout session');
+    const errorText = await response.text();
+    console.error('Checkout API error:', response.status, errorText);
+    try {
+      const error = JSON.parse(errorText);
+      throw new Error(error.error || error.message || `API error: ${response.status}`);
+    } catch {
+      throw new Error(`API error: ${response.status} - ${errorText}`);
+    }
   }
 
   return response.json();

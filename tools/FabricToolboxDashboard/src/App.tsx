@@ -2140,7 +2140,7 @@ const InfrastructureBuilderPanel = ({
                 // Redirect to Stripe checkout with user email
                 redirectToCheckout(user?.email).catch((err) => {
                   console.error('Checkout failed:', err);
-                  alert('Failed to start checkout. Please try again.');
+                  alert(`Checkout error: ${err.message}`);
                 });
               }}
               style={{
