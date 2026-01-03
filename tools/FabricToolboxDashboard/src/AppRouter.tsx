@@ -2,10 +2,14 @@ import { useEffect, useState } from 'react';
 import { LandingPage } from './components/pages/LandingPage';
 import App from './App';
 import { useAuth } from './hooks/useAuth';
+import { useSubscription } from './hooks/useSubscription';
+import { syncSubscriptionWithBackend } from './services/subscriptionService';
 
 export function AppRouter() {
-  const { isAuthenticated, isLoading } = useAuth();
+  const { isAuthenticated, isLoading, user } = useAuth();
+  const { refreshSubscription } = useSubscription();
   const [showDashboard, setShowDashboard] = useState(false);
+  const [isSyncing, setIsSyncing] = useState(false);
 
   // Check URL for dashboard route
   useEffect(() => {
@@ -20,8 +24,26 @@ export function AppRouter() {
     }
   }, []);
 
+  // Sync subscription with backend when user logs in
+  useEffect(() => {
+    async function syncSubscription() {
+      if (user?.email && isAuthenticated) {
+        setIsSyncing(true);
+        try {
+          await syncSubscriptionWithBackend(user.email);
+          refreshSubscription();
+        } catch (error) {
+          console.error('Failed to sync subscription:', error);
+        } finally {
+          setIsSyncing(false);
+        }
+      }
+    }
+    syncSubscription();
+  }, [user?.email, isAuthenticated, refreshSubscription]);
+
   // Show loading state
-  if (isLoading) {
+  if (isLoading || isSyncing) {
     return (
       <div style={{
         display: 'flex',
@@ -41,7 +63,7 @@ export function AppRouter() {
             animation: 'spin 1s linear infinite',
             margin: '0 auto 16px'
           }} />
-          <p style={{ color: '#64748b' }}>Loading...</p>
+          <p style={{ color: '#64748b' }}>{isSyncing ? 'Checking subscription...' : 'Loading...'}</p>
         </div>
         <style>{`
           @keyframes spin {

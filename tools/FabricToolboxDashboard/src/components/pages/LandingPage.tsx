@@ -1,5 +1,5 @@
-import { useState } from 'react';
 import { useSubscription } from '../../hooks/useSubscription';
+import { useAuth } from '../../hooks/useAuth';
 import { redirectToCheckout } from '../../services/stripeService';
 import '../../styles/landing.css';
 
@@ -78,7 +78,7 @@ const Icons = {
 
 export function LandingPage() {
   const { tier, isProUser } = useSubscription();
-  const [isAuthenticated] = useState(false); // Will be replaced with real auth
+  const { isAuthenticated, user } = useAuth();
 
   const handleGetStarted = () => {
     // Redirect to dashboard - auth will be handled there
@@ -87,7 +87,8 @@ export function LandingPage() {
 
   const handleUpgrade = async () => {
     try {
-      await redirectToCheckout();
+      // Pass user email if authenticated
+      await redirectToCheckout(user?.email);
     } catch (error) {
       console.error('Checkout failed:', error);
       alert('Failed to start checkout. Please try again.');

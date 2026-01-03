@@ -5,6 +5,15 @@
 
 export type SubscriptionTier = 'free' | 'pro';
 
+export interface BackendSubscriptionResponse {
+  tier: SubscriptionTier;
+  email: string;
+  customerId: string | null;
+  subscriptionId: string | null;
+  currentPeriodEnd: number | null;
+  cancelAtPeriodEnd?: boolean;
+}
+
 export interface SubscriptionState {
   tier: SubscriptionTier;
   customerId?: string; // Stripe customer ID
@@ -280,4 +289,53 @@ export function getTierDisplayName(tier: SubscriptionTier): string {
 
 export function getTierBadgeColor(tier: SubscriptionTier): string {
   return tier === 'pro' ? '#8B5CF6' : '#6B7280';
+}
+
+// ============ BACKEND SYNC ============
+
+/**
+ * Fetch subscription status from backend by user email
+ * This is the source of truth for subscription status
+ */
+export async function fetchSubscriptionFromBackend(email: string): Promise<BackendSubscriptionResponse | null> {
+  try {
+    const response = await fetch(`/api/user-subscription?email=${encodeURIComponent(email)}`);
+
+    if (!response.ok) {
+      console.error('Failed to fetch subscription:', response.statusText);
+      return null;
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error('Error fetching subscription:', error);
+    return null;
+  }
+}
+
+/**
+ * Sync local subscription state with backend
+ * Call this after login to ensure subscription is accurate
+ */
+export async function syncSubscriptionWithBackend(email: string): Promise<SubscriptionState> {
+  const backendData = await fetchSubscriptionFromBackend(email);
+
+  if (!backendData) {
+    // Backend unavailable, fall back to local state
+    return loadOrCreateSubscription();
+  }
+
+  const currentState = loadOrCreateSubscription();
+
+  // Update local state with backend data
+  const updated: SubscriptionState = {
+    ...currentState,
+    tier: backendData.tier,
+    customerId: backendData.customerId || undefined,
+    subscriptionId: backendData.subscriptionId || undefined,
+    currentPeriodEnd: backendData.currentPeriodEnd || undefined,
+  };
+
+  storeSubscription(updated);
+  return updated;
 }

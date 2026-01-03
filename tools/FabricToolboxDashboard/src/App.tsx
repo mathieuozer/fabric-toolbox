@@ -1431,6 +1431,7 @@ const InfrastructureBuilderPanel = ({
   isOpen: boolean;
   onClose: () => void;
 }) => {
+  const { user } = useAuth();
   const {
     messages,
     conversationState,
@@ -2136,8 +2137,8 @@ const InfrastructureBuilderPanel = ({
 
             <button
               onClick={() => {
-                // Redirect to Stripe checkout
-                redirectToCheckout().catch((err) => {
+                // Redirect to Stripe checkout with user email
+                redirectToCheckout(user?.email).catch((err) => {
                   console.error('Checkout failed:', err);
                   alert('Failed to start checkout. Please try again.');
                 });

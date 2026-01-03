@@ -22,6 +22,7 @@ import {
   getDaysUntilReset,
   getTierDisplayName,
   getTierBadgeColor,
+  syncSubscriptionWithBackend,
   PRICING,
   FREE_TEMPLATES,
 } from '../services/subscriptionService';
@@ -55,6 +56,7 @@ export interface UseSubscriptionReturn {
   handleUpgrade: (stripeData: { customerId: string; subscriptionId: string; currentPeriodEnd: number }) => void;
   handleDowngrade: () => void;
   refreshSubscription: () => void;
+  syncWithBackend: (email: string) => Promise<void>;
 
   // Display helpers
   tierDisplayName: string;
@@ -151,6 +153,11 @@ export function useSubscription(): UseSubscriptionReturn {
     setSubscription(updated);
   }, []);
 
+  const syncWithBackend = useCallback(async (email: string) => {
+    const updated = await syncSubscriptionWithBackend(email);
+    setSubscription(updated);
+  }, []);
+
   return {
     // State
     subscription,
@@ -180,6 +187,7 @@ export function useSubscription(): UseSubscriptionReturn {
     handleUpgrade,
     handleDowngrade,
     refreshSubscription,
+    syncWithBackend,
 
     // Display helpers
     tierDisplayName,
