@@ -2654,7 +2654,42 @@ export default function App() {
   const [selectedTool, setSelectedTool] = useState<ToolManifest | null>(null);
   const [prefilledConfig, setPrefilledConfig] = useState<ExtractedConfig | undefined>(undefined);
   const [aiChatOpen, setAiChatOpen] = useState(false);
-  const [infraBuilderOpen, setInfraBuilderOpen] = useState(false);
+  const [infraBuilderOpen, setInfraBuilderOpen] = useState(true); // Open by default
+  const [subscriptionMessage, setSubscriptionMessage] = useState<string | null>(null);
+
+  const { handleUpgrade } = useSubscription();
+
+  // Handle subscription success redirect from Stripe
+  useEffect(() => {
+    const handleSubscriptionSuccess = async () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const sessionId = urlParams.get('session_id');
+
+      if (sessionId && window.location.pathname === '/subscription/success') {
+        try {
+          // Verify the session with backend
+          const response = await fetch(`/api/verify-session?sessionId=${sessionId}`);
+          if (response.ok) {
+            const data = await response.json();
+            if (data.active) {
+              // Upgrade subscription locally
+              handleUpgrade({
+                customerId: data.customerId,
+                subscriptionId: data.subscriptionId,
+                currentPeriodEnd: data.currentPeriodEnd,
+              });
+              setSubscriptionMessage('Welcome to Pro! Your subscription is now active.');
+              // Clear URL params
+              window.history.replaceState({}, '', '/dashboard');
+            }
+          }
+        } catch (error) {
+          console.error('Failed to verify subscription:', error);
+        }
+      }
+    };
+    handleSubscriptionSuccess();
+  }, [handleUpgrade]);
 
   // Keyboard shortcut for command palette
   useEffect(() => {
@@ -2698,6 +2733,44 @@ export default function App() {
           color: #FEFEFE;
         }
       `}</style>
+
+      {/* Subscription success message */}
+      {subscriptionMessage && (
+        <div style={{
+          position: 'fixed',
+          top: '20px',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          background: 'linear-gradient(135deg, #22C55E 0%, #16A34A 100%)',
+          color: 'white',
+          padding: '12px 24px',
+          borderRadius: '8px',
+          boxShadow: '0 4px 20px rgba(34, 197, 94, 0.4)',
+          zIndex: 10000,
+          display: 'flex',
+          alignItems: 'center',
+          gap: '12px',
+          fontSize: '14px',
+          fontWeight: 500,
+        }}>
+          <span>🎉</span>
+          {subscriptionMessage}
+          <button
+            onClick={() => setSubscriptionMessage(null)}
+            style={{
+              background: 'rgba(255,255,255,0.2)',
+              border: 'none',
+              borderRadius: '4px',
+              color: 'white',
+              padding: '4px 8px',
+              cursor: 'pointer',
+              marginLeft: '8px',
+            }}
+          >
+            ✕
+          </button>
+        </div>
+      )}
 
       {/* Sidebar */}
       <aside style={{
