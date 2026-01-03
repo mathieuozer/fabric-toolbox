@@ -1,0 +1,584 @@
+<!-- ============================================
+     FABRIC TOOLBOX PROMOTIONAL SECTION
+     Add this section to platform-fabric.html
+     Place after the Services Overview section
+     ============================================ -->
+
+<style>
+/* Fabric Toolbox Section Styles */
+.toolbox-section {
+  padding: 100px 0;
+  background: linear-gradient(180deg, #F8FAFC 0%, #EFF6FF 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.toolbox-section::before {
+  content: '';
+  position: absolute;
+  top: -200px;
+  right: -200px;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(43,154,200,0.1) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.toolbox-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.toolbox-header {
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+.toolbox-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: rgba(43,154,200,0.1);
+  border: 1px solid rgba(43,154,200,0.2);
+  border-radius: 100px;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: #2B9AC8;
+  margin-bottom: 24px;
+}
+
+.toolbox-badge svg {
+  width: 16px;
+  height: 16px;
+}
+
+.toolbox-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 48px;
+  font-weight: 700;
+  background: linear-gradient(135deg, #1E7BA3 0%, #2B9AC8 50%, #47B7DF 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 16px;
+  line-height: 1.1;
+}
+
+.toolbox-subtitle {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 20px;
+  color: #64748b;
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+/* Main Content Layout */
+.toolbox-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: center;
+}
+
+@media (max-width: 900px) {
+  .toolbox-content {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+}
+
+/* Screenshot/Preview Card */
+.toolbox-preview {
+  background: #FFFFFF;
+  border-radius: 20px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 25px 50px -12px rgba(43,154,200,0.15);
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.toolbox-preview:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 30px 60px -15px rgba(43,154,200,0.25);
+}
+
+.toolbox-preview-header {
+  padding: 12px 16px;
+  background: linear-gradient(135deg, #1E7BA3 0%, #2B9AC8 100%);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.toolbox-preview-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.3);
+}
+
+.toolbox-preview-dot:first-child { background: #ff5f57; }
+.toolbox-preview-dot:nth-child(2) { background: #ffbd2e; }
+.toolbox-preview-dot:nth-child(3) { background: #28ca41; }
+
+.toolbox-preview-url {
+  flex: 1;
+  text-align: center;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 12px;
+  color: rgba(255,255,255,0.8);
+}
+
+.toolbox-preview-body {
+  padding: 24px;
+  background: #F8FAFC;
+  min-height: 280px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.toolbox-preview-demo {
+  display: flex;
+  gap: 12px;
+}
+
+.toolbox-preview-sidebar {
+  width: 60px;
+  background: #FFFFFF;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  padding: 12px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.toolbox-preview-nav-item {
+  height: 8px;
+  background: rgba(43,154,200,0.2);
+  border-radius: 4px;
+}
+
+.toolbox-preview-nav-item.active {
+  background: #2B9AC8;
+}
+
+.toolbox-preview-main {
+  flex: 1;
+  background: #FFFFFF;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  padding: 16px;
+}
+
+.toolbox-preview-card {
+  background: rgba(43,154,200,0.05);
+  border: 1px solid rgba(43,154,200,0.1);
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 12px;
+}
+
+.toolbox-preview-card-title {
+  height: 10px;
+  width: 60%;
+  background: #1a1a2e;
+  border-radius: 4px;
+  margin-bottom: 8px;
+}
+
+.toolbox-preview-card-text {
+  height: 6px;
+  width: 80%;
+  background: #94a3b8;
+  border-radius: 4px;
+}
+
+.toolbox-preview-btn {
+  display: inline-block;
+  padding: 8px 16px;
+  background: linear-gradient(135deg, #16a34a 0%, #22c55e 100%);
+  border-radius: 6px;
+  width: fit-content;
+}
+
+.toolbox-preview-btn-text {
+  height: 8px;
+  width: 80px;
+  background: rgba(255,255,255,0.8);
+  border-radius: 4px;
+}
+
+/* Features List */
+.toolbox-features {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.toolbox-feature {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.toolbox-feature-icon {
+  width: 48px;
+  height: 48px;
+  background: linear-gradient(135deg, rgba(43,154,200,0.1) 0%, rgba(71,183,223,0.1) 100%);
+  border: 1px solid rgba(43,154,200,0.2);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #2B9AC8;
+  flex-shrink: 0;
+}
+
+.toolbox-feature-icon svg {
+  width: 24px;
+  height: 24px;
+}
+
+.toolbox-feature-content h3 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  color: #1a1a2e;
+  margin-bottom: 4px;
+}
+
+.toolbox-feature-content p {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 14px;
+  color: #64748b;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* Pricing Comparison */
+.toolbox-pricing {
+  display: flex;
+  gap: 12px;
+  margin-top: 32px;
+  padding: 20px;
+  background: #FFFFFF;
+  border-radius: 16px;
+  border: 1px solid #e2e8f0;
+}
+
+.toolbox-plan {
+  flex: 1;
+  padding: 16px;
+  border-radius: 12px;
+  text-align: center;
+}
+
+.toolbox-plan.free {
+  background: rgba(43,154,200,0.05);
+  border: 1px solid rgba(43,154,200,0.1);
+}
+
+.toolbox-plan.pro {
+  background: linear-gradient(135deg, rgba(43,154,200,0.1) 0%, rgba(71,183,223,0.1) 100%);
+  border: 1px solid rgba(43,154,200,0.3);
+}
+
+.toolbox-plan-name {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #64748b;
+  margin-bottom: 4px;
+}
+
+.toolbox-plan-price {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: #1a1a2e;
+}
+
+.toolbox-plan-price span {
+  font-size: 14px;
+  font-weight: 400;
+  color: #64748b;
+}
+
+.toolbox-plan-feature {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 13px;
+  color: #64748b;
+  margin-top: 8px;
+}
+
+/* CTA Buttons */
+.toolbox-cta {
+  display: flex;
+  gap: 16px;
+  margin-top: 32px;
+}
+
+.toolbox-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 28px;
+  border-radius: 12px;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.toolbox-btn-primary {
+  background: linear-gradient(135deg, #1E7BA3 0%, #2B9AC8 50%, #47B7DF 100%);
+  color: #FFFFFF;
+  border: none;
+  box-shadow: 0 4px 15px rgba(43,154,200,0.3);
+}
+
+.toolbox-btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(43,154,200,0.4);
+}
+
+.toolbox-btn-secondary {
+  background: #FFFFFF;
+  color: #2B9AC8;
+  border: 1px solid rgba(43,154,200,0.3);
+}
+
+.toolbox-btn-secondary:hover {
+  background: rgba(43,154,200,0.05);
+  border-color: rgba(43,154,200,0.5);
+}
+
+.toolbox-btn svg {
+  width: 18px;
+  height: 18px;
+}
+</style>
+
+<!-- SECTION HTML -->
+<section class="toolbox-section" id="fabric-toolbox">
+  <div class="toolbox-container">
+
+    <!-- Header -->
+    <div class="toolbox-header">
+      <div class="toolbox-badge">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/>
+        </svg>
+        Free AI-Powered Tool
+      </div>
+      <h2 class="toolbox-title">Fabric Toolbox</h2>
+      <p class="toolbox-subtitle">
+        Build Microsoft Fabric infrastructure in minutes. Generate deployment scripts,
+        estimate costs, and configure environments with AI assistance.
+      </p>
+    </div>
+
+    <!-- Content Grid -->
+    <div class="toolbox-content">
+
+      <!-- Left: Preview Card -->
+      <div class="toolbox-preview">
+        <div class="toolbox-preview-header">
+          <div class="toolbox-preview-dot"></div>
+          <div class="toolbox-preview-dot"></div>
+          <div class="toolbox-preview-dot"></div>
+          <div class="toolbox-preview-url">fabric-toolbox.oryx-data.com</div>
+        </div>
+        <div class="toolbox-preview-body">
+          <div class="toolbox-preview-demo">
+            <div class="toolbox-preview-sidebar">
+              <div class="toolbox-preview-nav-item active"></div>
+              <div class="toolbox-preview-nav-item"></div>
+              <div class="toolbox-preview-nav-item"></div>
+              <div class="toolbox-preview-nav-item"></div>
+            </div>
+            <div class="toolbox-preview-main">
+              <div class="toolbox-preview-card">
+                <div class="toolbox-preview-card-title"></div>
+                <div class="toolbox-preview-card-text"></div>
+              </div>
+              <div class="toolbox-preview-card">
+                <div class="toolbox-preview-card-title"></div>
+                <div class="toolbox-preview-card-text"></div>
+              </div>
+              <div class="toolbox-preview-btn">
+                <div class="toolbox-preview-btn-text"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Features -->
+      <div class="toolbox-features">
+
+        <div class="toolbox-feature">
+          <div class="toolbox-feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/>
+              <path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/>
+            </svg>
+          </div>
+          <div class="toolbox-feature-content">
+            <h3>AI-Powered Generation</h3>
+            <p>Describe your infrastructure needs in plain English. Our AI generates PowerShell, Bicep, or Terraform scripts automatically.</p>
+          </div>
+        </div>
+
+        <div class="toolbox-feature">
+          <div class="toolbox-feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/>
+              <path d="m3.3 7 8.7 5 8.7-5"/>
+              <path d="M12 22V12"/>
+            </svg>
+          </div>
+          <div class="toolbox-feature-content">
+            <h3>6 Enterprise Templates</h3>
+            <p>From starter workspaces to full data lakehouses with CI/CD. Production-ready configurations built by Microsoft Gold Partners.</p>
+          </div>
+        </div>
+
+        <div class="toolbox-feature">
+          <div class="toolbox-feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="12" x2="12" y1="2" y2="22"/>
+              <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+            </svg>
+          </div>
+          <div class="toolbox-feature-content">
+            <h3>Cost Estimation</h3>
+            <p>Get Azure cost estimates before you deploy. Understand your monthly spend and optimize configurations.</p>
+          </div>
+        </div>
+
+        <div class="toolbox-feature">
+          <div class="toolbox-feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+              <polyline points="7 10 12 15 17 10"/>
+              <line x1="12" x2="12" y1="15" y2="3"/>
+            </svg>
+          </div>
+          <div class="toolbox-feature-content">
+            <h3>Download & Deploy</h3>
+            <p>Export complete deployment packages with scripts, environment files, and documentation. Ready for your CI/CD pipeline.</p>
+          </div>
+        </div>
+
+        <!-- Pricing Pills -->
+        <div class="toolbox-pricing">
+          <div class="toolbox-plan free">
+            <div class="toolbox-plan-name">Free</div>
+            <div class="toolbox-plan-price">$0</div>
+            <div class="toolbox-plan-feature">3 generations/month</div>
+          </div>
+          <div class="toolbox-plan pro">
+            <div class="toolbox-plan-name">Pro</div>
+            <div class="toolbox-plan-price">$15<span>/mo</span></div>
+            <div class="toolbox-plan-feature">Unlimited + all templates</div>
+          </div>
+        </div>
+
+        <!-- CTA Buttons -->
+        <div class="toolbox-cta">
+          <a href="https://nice-wave-0d4061b03.6.azurestaticapps.net"
+             class="toolbox-btn toolbox-btn-primary"
+             target="_blank">
+            Try Fabric Toolbox Free
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M5 12h14"/>
+              <path d="m12 5 7 7-7 7"/>
+            </svg>
+          </a>
+          <a href="#contact" class="toolbox-btn toolbox-btn-secondary">
+            Request Demo
+          </a>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ============================================
+     ALTERNATIVE: Simple Banner Version
+     Use this for a smaller promotional element
+     ============================================ -->
+
+<style>
+.toolbox-banner {
+  background: linear-gradient(135deg, #1E7BA3 0%, #2B9AC8 50%, #47B7DF 100%);
+  padding: 40px 24px;
+  text-align: center;
+}
+
+.toolbox-banner-content {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.toolbox-banner h3 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: #FFFFFF;
+  margin-bottom: 12px;
+}
+
+.toolbox-banner p {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 16px;
+  color: rgba(255,255,255,0.9);
+  margin-bottom: 24px;
+}
+
+.toolbox-banner-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 28px;
+  background: #FFFFFF;
+  color: #2B9AC8;
+  border-radius: 12px;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.toolbox-banner-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+}
+</style>
+
+<section class="toolbox-banner">
+  <div class="toolbox-banner-content">
+    <h3>Try Our Free Fabric Toolbox</h3>
+    <p>AI-powered infrastructure builder. Generate deployment scripts in seconds.</p>
+    <a href="https://nice-wave-0d4061b03.6.azurestaticapps.net"
+       class="toolbox-banner-btn"
+       target="_blank">
+      Launch Fabric Toolbox →
+    </a>
+  </div>
+</section>

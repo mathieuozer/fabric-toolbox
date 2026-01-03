@@ -1,0 +1,1909 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Microsoft Fabric Services | Oryx Data</title>
+  <meta name="description" content="Enterprise Microsoft Fabric implementation. AI-powered infrastructure builder, OneLake architecture, Data Factory, Synapse, Power BI, and Real-Time Analytics.">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="/favicon.png">
+
+  <style>
+    /* ==========================================
+       CSS RESET & BASE
+       ========================================== */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: #F8FAFC;
+      color: #1a1a2e;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    img {
+      max-width: 100%;
+      height: auto;
+    }
+
+    /* ==========================================
+       VARIABLES
+       ========================================== */
+    :root {
+      --primary: #2B9AC8;
+      --primary-dark: #1E7BA3;
+      --primary-light: #47B7DF;
+      --accent: #22C55E;
+      --accent-dark: #16a34a;
+      --surface: #F8FAFC;
+      --surface-dark: #EFF6FF;
+      --text: #1a1a2e;
+      --text-secondary: #64748b;
+      --text-muted: #94a3b8;
+      --border: #e2e8f0;
+      --white: #FFFFFF;
+      --gradient: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 50%, var(--primary-light) 100%);
+    }
+
+    /* ==========================================
+       TYPOGRAPHY
+       ========================================== */
+    h1, h2, h3, h4, h5, h6 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      line-height: 1.2;
+    }
+
+    .gradient-text {
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* ==========================================
+       LAYOUT
+       ========================================== */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .section {
+      padding: 100px 0;
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 60px;
+    }
+
+    .section-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      background: rgba(43, 154, 200, 0.1);
+      border: 1px solid rgba(43, 154, 200, 0.2);
+      border-radius: 100px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--primary);
+      margin-bottom: 20px;
+    }
+
+    .section-title {
+      font-size: 42px;
+      margin-bottom: 16px;
+    }
+
+    .section-subtitle {
+      font-size: 18px;
+      color: var(--text-secondary);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* ==========================================
+       BUTTONS
+       ========================================== */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 28px;
+      border-radius: 12px;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: none;
+    }
+
+    .btn-primary {
+      background: var(--gradient);
+      color: var(--white);
+      box-shadow: 0 4px 15px rgba(43, 154, 200, 0.3);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(43, 154, 200, 0.4);
+    }
+
+    .btn-secondary {
+      background: var(--white);
+      color: var(--primary);
+      border: 1px solid rgba(43, 154, 200, 0.3);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(43, 154, 200, 0.05);
+      border-color: rgba(43, 154, 200, 0.5);
+    }
+
+    .btn-accent {
+      background: linear-gradient(135deg, var(--accent-dark) 0%, var(--accent) 100%);
+      color: var(--white);
+      box-shadow: 0 4px 15px rgba(34, 197, 94, 0.3);
+    }
+
+    .btn-accent:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(34, 197, 94, 0.4);
+    }
+
+    .btn svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    /* ==========================================
+       HEADER / NAVIGATION
+       ========================================== */
+    .header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      background: rgba(248, 250, 252, 0.95);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 24px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+    }
+
+    .logo img {
+      height: 36px;
+      width: auto;
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .nav-link {
+      padding: 10px 16px;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      border-radius: 8px;
+      transition: all 0.2s ease;
+    }
+
+    .nav-link:hover {
+      color: var(--text);
+      background: rgba(43, 154, 200, 0.05);
+    }
+
+    .nav-link.active {
+      color: var(--primary);
+      background: rgba(43, 154, 200, 0.1);
+    }
+
+    .nav-dropdown {
+      position: relative;
+    }
+
+    .nav-dropdown-menu {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 8px;
+      min-width: 200px;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(10px);
+      transition: all 0.2s ease;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+    }
+
+    .nav-dropdown:hover .nav-dropdown-menu {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    .nav-dropdown-item {
+      display: block;
+      padding: 10px 14px;
+      font-size: 14px;
+      color: var(--text-secondary);
+      border-radius: 8px;
+      transition: all 0.2s ease;
+    }
+
+    .nav-dropdown-item:hover {
+      color: var(--primary);
+      background: rgba(43, 154, 200, 0.05);
+    }
+
+    .header-cta {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    /* Mobile menu */
+    .mobile-menu-btn {
+      display: none;
+      background: none;
+      border: none;
+      padding: 8px;
+      cursor: pointer;
+    }
+
+    @media (max-width: 1024px) {
+      .nav {
+        display: none;
+      }
+      .mobile-menu-btn {
+        display: block;
+      }
+    }
+
+    /* ==========================================
+       HERO SECTION
+       ========================================== */
+    .hero {
+      padding: 160px 0 100px;
+      background: linear-gradient(180deg, var(--surface) 0%, var(--surface-dark) 100%);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -300px;
+      right: -300px;
+      width: 800px;
+      height: 800px;
+      background: radial-gradient(circle, rgba(43, 154, 200, 0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-content {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+    }
+
+    @media (max-width: 900px) {
+      .hero-content {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      background: rgba(43, 154, 200, 0.1);
+      border: 1px solid rgba(43, 154, 200, 0.2);
+      border-radius: 100px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--primary);
+      margin-bottom: 24px;
+    }
+
+    .hero-title {
+      font-size: 56px;
+      margin-bottom: 20px;
+      line-height: 1.1;
+    }
+
+    @media (max-width: 768px) {
+      .hero-title {
+        font-size: 40px;
+      }
+    }
+
+    .hero-subtitle {
+      font-size: 18px;
+      color: var(--text-secondary);
+      margin-bottom: 32px;
+      line-height: 1.7;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    @media (max-width: 900px) {
+      .hero-buttons {
+        justify-content: center;
+      }
+    }
+
+    .hero-stats {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+
+    .hero-stat {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+
+    .hero-stat:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 10px 30px rgba(43, 154, 200, 0.1);
+    }
+
+    .hero-stat-value {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 36px;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 4px;
+    }
+
+    .hero-stat-label {
+      font-size: 14px;
+      color: var(--text-secondary);
+    }
+
+    /* ==========================================
+       TOOLBOX HIGHLIGHT SECTION
+       ========================================== */
+    .toolbox-highlight {
+      padding: 80px 0;
+      background: var(--gradient);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .toolbox-highlight::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+
+    .toolbox-highlight-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+      position: relative;
+    }
+
+    @media (max-width: 900px) {
+      .toolbox-highlight-inner {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+    }
+
+    .toolbox-highlight-content h2 {
+      font-size: 40px;
+      color: var(--white);
+      margin-bottom: 16px;
+    }
+
+    .toolbox-highlight-content p {
+      font-size: 18px;
+      color: rgba(255, 255, 255, 0.9);
+      margin-bottom: 32px;
+      line-height: 1.7;
+    }
+
+    .toolbox-highlight-features {
+      display: flex;
+      gap: 24px;
+      margin-bottom: 32px;
+      flex-wrap: wrap;
+    }
+
+    @media (max-width: 900px) {
+      .toolbox-highlight-features {
+        justify-content: center;
+      }
+    }
+
+    .toolbox-highlight-feature {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--white);
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .toolbox-highlight-feature svg {
+      width: 20px;
+      height: 20px;
+      color: rgba(255, 255, 255, 0.8);
+    }
+
+    .toolbox-highlight-buttons {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    @media (max-width: 900px) {
+      .toolbox-highlight-buttons {
+        justify-content: center;
+      }
+    }
+
+    .btn-white {
+      background: var(--white);
+      color: var(--primary);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .btn-white:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    }
+
+    .btn-outline-white {
+      background: transparent;
+      color: var(--white);
+      border: 2px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .btn-outline-white:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.5);
+    }
+
+    /* Toolbox Preview Card */
+    .toolbox-preview-card {
+      background: var(--white);
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.2);
+      transform: perspective(1000px) rotateY(-5deg) rotateX(5deg);
+      transition: transform 0.3s ease;
+    }
+
+    .toolbox-preview-card:hover {
+      transform: perspective(1000px) rotateY(0) rotateX(0);
+    }
+
+    @media (max-width: 900px) {
+      .toolbox-preview-card {
+        transform: none;
+        max-width: 400px;
+        margin: 0 auto;
+      }
+    }
+
+    .toolbox-preview-header {
+      padding: 12px 16px;
+      background: #1e293b;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .toolbox-preview-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }
+
+    .toolbox-preview-dot:nth-child(1) { background: #ff5f57; }
+    .toolbox-preview-dot:nth-child(2) { background: #ffbd2e; }
+    .toolbox-preview-dot:nth-child(3) { background: #28ca41; }
+
+    .toolbox-preview-url {
+      flex: 1;
+      text-align: center;
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    .toolbox-preview-body {
+      padding: 24px;
+      background: var(--surface);
+      min-height: 200px;
+    }
+
+    .toolbox-preview-ui {
+      display: flex;
+      gap: 16px;
+    }
+
+    .toolbox-preview-sidebar {
+      width: 50px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .toolbox-preview-nav {
+      height: 8px;
+      background: rgba(43, 154, 200, 0.2);
+      border-radius: 4px;
+    }
+
+    .toolbox-preview-nav.active {
+      background: var(--primary);
+    }
+
+    .toolbox-preview-main {
+      flex: 1;
+      background: var(--white);
+      border-radius: 8px;
+      padding: 16px;
+      border: 1px solid var(--border);
+    }
+
+    .toolbox-preview-card-inner {
+      background: rgba(43, 154, 200, 0.05);
+      border: 1px solid rgba(43, 154, 200, 0.1);
+      border-radius: 8px;
+      padding: 12px;
+      margin-bottom: 12px;
+    }
+
+    .toolbox-preview-title {
+      height: 10px;
+      width: 70%;
+      background: var(--text);
+      border-radius: 4px;
+      margin-bottom: 8px;
+    }
+
+    .toolbox-preview-text {
+      height: 6px;
+      width: 90%;
+      background: var(--text-muted);
+      border-radius: 4px;
+    }
+
+    .toolbox-preview-btn {
+      display: inline-block;
+      padding: 8px 16px;
+      background: var(--accent);
+      border-radius: 6px;
+    }
+
+    .toolbox-preview-btn-text {
+      height: 8px;
+      width: 60px;
+      background: rgba(255, 255, 255, 0.8);
+      border-radius: 4px;
+    }
+
+    /* ==========================================
+       SERVICES SECTION
+       ========================================== */
+    .services {
+      background: var(--white);
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    @media (max-width: 900px) {
+      .services-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 600px) {
+      .services-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .service-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 32px;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .service-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: var(--gradient);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.3s ease;
+    }
+
+    .service-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 40px rgba(43, 154, 200, 0.1);
+    }
+
+    .service-card:hover::before {
+      transform: scaleX(1);
+    }
+
+    .service-icon {
+      width: 56px;
+      height: 56px;
+      background: rgba(43, 154, 200, 0.1);
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--primary);
+      margin-bottom: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .service-card:hover .service-icon {
+      background: var(--gradient);
+      color: var(--white);
+      transform: scale(1.1);
+    }
+
+    .service-icon svg {
+      width: 28px;
+      height: 28px;
+    }
+
+    .service-title {
+      font-size: 20px;
+      margin-bottom: 12px;
+      color: var(--text);
+    }
+
+    .service-description {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    /* ==========================================
+       TOOLBOX FULL SECTION
+       ========================================== */
+    .toolbox-section {
+      background: linear-gradient(180deg, var(--surface-dark) 0%, var(--surface) 100%);
+      position: relative;
+    }
+
+    .toolbox-content {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+
+    @media (max-width: 900px) {
+      .toolbox-content {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+    }
+
+    .toolbox-features-list {
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+    }
+
+    .toolbox-feature {
+      display: flex;
+      gap: 20px;
+      align-items: flex-start;
+    }
+
+    .toolbox-feature-icon {
+      width: 52px;
+      height: 52px;
+      background: rgba(43, 154, 200, 0.1);
+      border: 1px solid rgba(43, 154, 200, 0.2);
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--primary);
+      flex-shrink: 0;
+    }
+
+    .toolbox-feature-icon svg {
+      width: 24px;
+      height: 24px;
+    }
+
+    .toolbox-feature h3 {
+      font-size: 18px;
+      margin-bottom: 6px;
+      color: var(--text);
+    }
+
+    .toolbox-feature p {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    /* Pricing Cards */
+    .toolbox-pricing {
+      display: flex;
+      gap: 16px;
+      margin-top: 40px;
+    }
+
+    .toolbox-plan {
+      flex: 1;
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+
+    .toolbox-plan:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 10px 30px rgba(43, 154, 200, 0.1);
+    }
+
+    .toolbox-plan.featured {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 1px var(--primary);
+    }
+
+    .toolbox-plan-badge {
+      display: inline-block;
+      padding: 4px 12px;
+      background: rgba(43, 154, 200, 0.1);
+      border-radius: 100px;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--primary);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 12px;
+    }
+
+    .toolbox-plan-price {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 36px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+
+    .toolbox-plan-price span {
+      font-size: 16px;
+      font-weight: 400;
+      color: var(--text-secondary);
+    }
+
+    .toolbox-plan-feature {
+      font-size: 14px;
+      color: var(--text-secondary);
+    }
+
+    /* Screenshot */
+    .toolbox-screenshot {
+      background: var(--white);
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      overflow: hidden;
+      box-shadow: 0 25px 50px rgba(43, 154, 200, 0.15);
+    }
+
+    .toolbox-screenshot-header {
+      padding: 12px 16px;
+      background: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .toolbox-screenshot-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }
+
+    .toolbox-screenshot-dot:nth-child(1) { background: #ff5f57; }
+    .toolbox-screenshot-dot:nth-child(2) { background: #ffbd2e; }
+    .toolbox-screenshot-dot:nth-child(3) { background: #28ca41; }
+
+    .toolbox-screenshot-body {
+      padding: 20px;
+      background: var(--surface);
+      min-height: 300px;
+    }
+
+    /* ==========================================
+       CREDENTIALS SECTION
+       ========================================== */
+    .credentials {
+      background: var(--white);
+    }
+
+    .credentials-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+    }
+
+    @media (max-width: 900px) {
+      .credentials-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 500px) {
+      .credentials-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .credential-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+
+    .credential-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 10px 30px rgba(43, 154, 200, 0.1);
+    }
+
+    .credential-icon {
+      width: 64px;
+      height: 64px;
+      background: rgba(43, 154, 200, 0.1);
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 16px;
+      color: var(--primary);
+    }
+
+    .credential-icon svg {
+      width: 32px;
+      height: 32px;
+    }
+
+    .credential-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+
+    .credential-subtitle {
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+
+    /* ==========================================
+       TECHNOLOGIES SECTION
+       ========================================== */
+    .technologies {
+      background: var(--surface);
+    }
+
+    .tech-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 20px;
+    }
+
+    @media (max-width: 900px) {
+      .tech-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    @media (max-width: 500px) {
+      .tech-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    .tech-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+
+    .tech-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 10px 30px rgba(43, 154, 200, 0.1);
+      border-color: var(--primary);
+    }
+
+    .tech-icon {
+      width: 48px;
+      height: 48px;
+      background: rgba(43, 154, 200, 0.1);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 12px;
+      color: var(--primary);
+    }
+
+    .tech-icon svg {
+      width: 24px;
+      height: 24px;
+    }
+
+    .tech-name {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    /* ==========================================
+       CTA SECTION
+       ========================================== */
+    .cta-section {
+      background: var(--gradient);
+      padding: 80px 0;
+      text-align: center;
+    }
+
+    .cta-section h2 {
+      font-size: 36px;
+      color: var(--white);
+      margin-bottom: 16px;
+    }
+
+    .cta-section p {
+      font-size: 18px;
+      color: rgba(255, 255, 255, 0.9);
+      margin-bottom: 32px;
+      max-width: 500px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .cta-buttons {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    /* ==========================================
+       FOOTER
+       ========================================== */
+    .footer {
+      background: var(--text);
+      padding: 80px 0 40px;
+      color: var(--white);
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 60px;
+      margin-bottom: 60px;
+    }
+
+    @media (max-width: 900px) {
+      .footer-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 40px;
+      }
+    }
+
+    @media (max-width: 500px) {
+      .footer-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .footer-brand {
+      max-width: 300px;
+    }
+
+    .footer-logo {
+      margin-bottom: 16px;
+    }
+
+    .footer-logo img {
+      height: 32px;
+      width: auto;
+      filter: brightness(0) invert(1);
+    }
+
+    .footer-tagline {
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.7);
+      line-height: 1.6;
+    }
+
+    .footer-column h4 {
+      font-size: 14px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 20px;
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+    .footer-links {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .footer-link {
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.7);
+      transition: color 0.2s ease;
+    }
+
+    .footer-link:hover {
+      color: var(--primary-light);
+    }
+
+    .footer-bottom {
+      padding-top: 40px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .footer-copyright {
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+    .footer-social {
+      display: flex;
+      gap: 16px;
+    }
+
+    .footer-social a {
+      width: 40px;
+      height: 40px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: rgba(255, 255, 255, 0.7);
+      transition: all 0.2s ease;
+    }
+
+    .footer-social a:hover {
+      background: var(--primary);
+      color: var(--white);
+    }
+
+    .footer-social svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    /* ==========================================
+       ANIMATIONS
+       ========================================== */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.6s ease;
+    }
+
+    .reveal.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ==========================================
+       HEADER
+       ========================================== -->
+  <header class="header">
+    <div class="header-inner">
+      <a href="/" class="logo"><img src="oryx-logo.webp" alt="Oryx Data"></a>
+
+      <nav class="nav">
+        <a href="/" class="nav-link">Home</a>
+        <a href="/about.html" class="nav-link">About</a>
+
+        <div class="nav-dropdown">
+          <a href="#" class="nav-link">Solutions</a>
+          <div class="nav-dropdown-menu">
+            <a href="/solutions-finance.html" class="nav-dropdown-item">Financial Services</a>
+            <a href="/solutions-healthcare.html" class="nav-dropdown-item">Healthcare</a>
+            <a href="/solutions-government.html" class="nav-dropdown-item">Government</a>
+            <a href="/solutions-energy.html" class="nav-dropdown-item">Energy & Utilities</a>
+            <a href="/solutions-telecom.html" class="nav-dropdown-item">Telecom</a>
+            <a href="/solutions-defence.html" class="nav-dropdown-item">Defence & Security</a>
+          </div>
+        </div>
+
+        <div class="nav-dropdown">
+          <a href="#" class="nav-link active">Data Engineering</a>
+          <div class="nav-dropdown-menu">
+            <a href="/platform-databricks.html" class="nav-dropdown-item">Databricks</a>
+            <a href="/platform-snowflake.html" class="nav-dropdown-item">Snowflake</a>
+            <a href="/platform-fabric.html" class="nav-dropdown-item">Microsoft Fabric</a>
+            <a href="/platform-confluent.html" class="nav-dropdown-item">Confluent</a>
+            <a href="/platform-cloudera.html" class="nav-dropdown-item">Cloudera</a>
+          </div>
+        </div>
+
+        <a href="/projects.html" class="nav-link">Projects</a>
+        <a href="/careers.html" class="nav-link">Careers</a>
+      </nav>
+
+      <div class="header-cta">
+        <a href="https://nice-wave-0d4061b03.6.azurestaticapps.net" class="btn btn-secondary" target="_blank">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+          </svg>
+          Fabric Toolbox
+        </a>
+        <a href="#contact" class="btn btn-primary">Request Demo</a>
+      </div>
+
+      <button class="mobile-menu-btn">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="3" y1="12" x2="21" y2="12"/>
+          <line x1="3" y1="6" x2="21" y2="6"/>
+          <line x1="3" y1="18" x2="21" y2="18"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- ==========================================
+       HERO SECTION
+       ========================================== -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-content">
+        <div class="hero-text">
+          <div class="hero-badge">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+              <path d="M2 17l10 5 10-5"/>
+              <path d="M2 12l10 5 10-5"/>
+            </svg>
+            Microsoft Gold Partner
+          </div>
+          <h1 class="hero-title">
+            <span class="gradient-text">Microsoft Fabric</span><br>
+            Implementation Experts
+          </h1>
+          <p class="hero-subtitle">
+            Unified analytics platform for enterprise data. We help you implement OneLake,
+            Data Factory, Synapse, Power BI, and Real-Time Analytics with AI-powered tools
+            and proven methodologies.
+          </p>
+          <div class="hero-buttons">
+            <a href="https://nice-wave-0d4061b03.6.azurestaticapps.net" class="btn btn-accent" target="_blank">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+              </svg>
+              Try Fabric Toolbox Free
+            </a>
+            <a href="#contact" class="btn btn-secondary">
+              Schedule Consultation
+            </a>
+          </div>
+        </div>
+
+        <div class="hero-stats">
+          <div class="hero-stat">
+            <div class="hero-stat-value">20+</div>
+            <div class="hero-stat-label">Fabric Projects</div>
+          </div>
+          <div class="hero-stat">
+            <div class="hero-stat-value">Gold</div>
+            <div class="hero-stat-label">MS Partner</div>
+          </div>
+          <div class="hero-stat">
+            <div class="hero-stat-value">50+</div>
+            <div class="hero-stat-label">Power BI Reports</div>
+          </div>
+          <div class="hero-stat">
+            <div class="hero-stat-value">100%</div>
+            <div class="hero-stat-label">Azure Integrated</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================
+       TOOLBOX HIGHLIGHT BANNER
+       ========================================== -->
+  <section class="toolbox-highlight">
+    <div class="container">
+      <div class="toolbox-highlight-inner">
+        <div class="toolbox-highlight-content">
+          <h2>Build Fabric Infrastructure in Minutes</h2>
+          <p>
+            Our free AI-powered Fabric Toolbox generates deployment scripts, estimates costs,
+            and configures your environment automatically. No more manual setup.
+          </p>
+          <div class="toolbox-highlight-features">
+            <div class="toolbox-highlight-feature">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="20 6 9 17 4 12"/>
+              </svg>
+              PowerShell, Bicep, Terraform
+            </div>
+            <div class="toolbox-highlight-feature">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="20 6 9 17 4 12"/>
+              </svg>
+              6 Enterprise Templates
+            </div>
+            <div class="toolbox-highlight-feature">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="20 6 9 17 4 12"/>
+              </svg>
+              Cost Estimation
+            </div>
+          </div>
+          <div class="toolbox-highlight-buttons">
+            <a href="https://nice-wave-0d4061b03.6.azurestaticapps.net" class="btn btn-white" target="_blank">
+              Launch Fabric Toolbox
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M5 12h14"/>
+                <path d="m12 5 7 7-7 7"/>
+              </svg>
+            </a>
+            <a href="#toolbox" class="btn btn-outline-white">
+              Learn More
+            </a>
+          </div>
+        </div>
+
+        <div class="toolbox-preview-card">
+          <div class="toolbox-preview-header">
+            <div class="toolbox-preview-dot"></div>
+            <div class="toolbox-preview-dot"></div>
+            <div class="toolbox-preview-dot"></div>
+            <div class="toolbox-preview-url">fabric-toolbox.oryx-data.com</div>
+          </div>
+          <div class="toolbox-preview-body">
+            <div class="toolbox-preview-ui">
+              <div class="toolbox-preview-sidebar">
+                <div class="toolbox-preview-nav active"></div>
+                <div class="toolbox-preview-nav"></div>
+                <div class="toolbox-preview-nav"></div>
+                <div class="toolbox-preview-nav"></div>
+              </div>
+              <div class="toolbox-preview-main">
+                <div class="toolbox-preview-card-inner">
+                  <div class="toolbox-preview-title"></div>
+                  <div class="toolbox-preview-text"></div>
+                </div>
+                <div class="toolbox-preview-card-inner">
+                  <div class="toolbox-preview-title"></div>
+                  <div class="toolbox-preview-text"></div>
+                </div>
+                <div class="toolbox-preview-btn">
+                  <div class="toolbox-preview-btn-text"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================
+       SERVICES SECTION
+       ========================================== -->
+  <section class="section services">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-badge">Our Capabilities</div>
+        <h2 class="section-title"><span class="gradient-text">Fabric Services</span></h2>
+        <p class="section-subtitle">
+          End-to-end Microsoft Fabric implementation from architecture design to production deployment.
+        </p>
+      </div>
+
+      <div class="services-grid">
+        <div class="service-card reveal">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <ellipse cx="12" cy="5" rx="9" ry="3"/>
+              <path d="M3 5V19A9 3 0 0 0 21 19V5"/>
+              <path d="M3 12A9 3 0 0 0 21 12"/>
+            </svg>
+          </div>
+          <h3 class="service-title">OneLake Architecture</h3>
+          <p class="service-description">
+            Unified data lake foundation with automatic data organization, shortcuts, and governance.
+            Single source of truth for all your analytics.
+          </p>
+        </div>
+
+        <div class="service-card reveal">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 2v4"/>
+              <path d="m6.8 15-3.5 2"/>
+              <path d="m20.7 15-3.5 2"/>
+              <path d="M6.8 9 3.3 7"/>
+              <path d="m20.7 9-3.5-2"/>
+              <circle cx="12" cy="12" r="4"/>
+            </svg>
+          </div>
+          <h3 class="service-title">Data Factory Pipelines</h3>
+          <p class="service-description">
+            Scalable ETL/ELT workflows with 90+ connectors. Dataflows Gen2, data pipelines,
+            and orchestration for complex data transformations.
+          </p>
+        </div>
+
+        <div class="service-card reveal">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/>
+              <path d="m3.3 7 8.7 5 8.7-5"/>
+              <path d="M12 22V12"/>
+            </svg>
+          </div>
+          <h3 class="service-title">Synapse Data Warehouse</h3>
+          <p class="service-description">
+            Enterprise-grade analytics warehouse with T-SQL, automatic statistics, and
+            intelligent query processing for petabyte-scale insights.
+          </p>
+        </div>
+
+        <div class="service-card reveal">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" x2="18" y1="20" y2="10"/>
+              <line x1="12" x2="12" y1="20" y2="4"/>
+              <line x1="6" x2="6" y1="20" y2="14"/>
+            </svg>
+          </div>
+          <h3 class="service-title">Power BI Analytics</h3>
+          <p class="service-description">
+            Direct Lake mode for real-time dashboards. Semantic models, paginated reports,
+            and embedded analytics with enterprise governance.
+          </p>
+        </div>
+
+        <div class="service-card reveal">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 2a4 4 0 0 0-4 4v8a4 4 0 0 0 8 0V6a4 4 0 0 0-4-4Z"/>
+              <path d="M18 12a6 6 0 0 1-12 0"/>
+              <path d="M12 18v4"/>
+            </svg>
+          </div>
+          <h3 class="service-title">Data Science & ML</h3>
+          <p class="service-description">
+            Spark notebooks, MLflow experiments, and model deployment. Build and operationalize
+            machine learning at enterprise scale.
+          </p>
+        </div>
+
+        <div class="service-card reveal">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+            </svg>
+          </div>
+          <h3 class="service-title">Real-Time Analytics</h3>
+          <p class="service-description">
+            KQL databases, eventstreams, and real-time dashboards. Process millions of events
+            per second with sub-second latency.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================
+       TOOLBOX FULL SECTION
+       ========================================== -->
+  <section class="section toolbox-section" id="toolbox">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-badge">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/>
+          </svg>
+          Free AI Tool
+        </div>
+        <h2 class="section-title"><span class="gradient-text">Fabric Toolbox</span></h2>
+        <p class="section-subtitle">
+          The fastest way to set up Microsoft Fabric infrastructure. AI-powered, template-based,
+          and completely free to start.
+        </p>
+      </div>
+
+      <div class="toolbox-content">
+        <div>
+          <div class="toolbox-features-list">
+            <div class="toolbox-feature reveal">
+              <div class="toolbox-feature-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/>
+                </svg>
+              </div>
+              <div>
+                <h3>AI-Powered Generation</h3>
+                <p>Describe your infrastructure needs in plain English. Our AI generates PowerShell, Bicep, or Terraform scripts automatically.</p>
+              </div>
+            </div>
+
+            <div class="toolbox-feature reveal">
+              <div class="toolbox-feature-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/>
+                  <path d="m3.3 7 8.7 5 8.7-5"/>
+                  <path d="M12 22V12"/>
+                </svg>
+              </div>
+              <div>
+                <h3>6 Enterprise Templates</h3>
+                <p>From starter workspaces to full data lakehouses with CI/CD. Production-ready configurations built by Microsoft Gold Partners.</p>
+              </div>
+            </div>
+
+            <div class="toolbox-feature reveal">
+              <div class="toolbox-feature-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <line x1="12" x2="12" y1="2" y2="22"/>
+                  <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                </svg>
+              </div>
+              <div>
+                <h3>Cost Estimation</h3>
+                <p>Get Azure cost estimates before you deploy. Understand your monthly spend and optimize configurations upfront.</p>
+              </div>
+            </div>
+
+            <div class="toolbox-feature reveal">
+              <div class="toolbox-feature-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                  <polyline points="7 10 12 15 17 10"/>
+                  <line x1="12" x2="12" y1="15" y2="3"/>
+                </svg>
+              </div>
+              <div>
+                <h3>Download & Deploy</h3>
+                <p>Export complete deployment packages with scripts, environment files, and documentation. Ready for your CI/CD pipeline.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="toolbox-pricing">
+            <div class="toolbox-plan">
+              <div class="toolbox-plan-badge">Free</div>
+              <div class="toolbox-plan-price">$0</div>
+              <div class="toolbox-plan-feature">3 generations/month</div>
+            </div>
+            <div class="toolbox-plan featured">
+              <div class="toolbox-plan-badge">Pro</div>
+              <div class="toolbox-plan-price">$15<span>/mo</span></div>
+              <div class="toolbox-plan-feature">Unlimited + all templates</div>
+            </div>
+          </div>
+
+          <div style="margin-top: 32px;">
+            <a href="https://nice-wave-0d4061b03.6.azurestaticapps.net" class="btn btn-primary" target="_blank">
+              Try Fabric Toolbox Free
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M5 12h14"/>
+                <path d="m12 5 7 7-7 7"/>
+              </svg>
+            </a>
+          </div>
+        </div>
+
+        <div class="toolbox-screenshot reveal">
+          <div class="toolbox-screenshot-header">
+            <div class="toolbox-screenshot-dot"></div>
+            <div class="toolbox-screenshot-dot"></div>
+            <div class="toolbox-screenshot-dot"></div>
+          </div>
+          <div class="toolbox-screenshot-body">
+            <div class="toolbox-preview-ui">
+              <div class="toolbox-preview-sidebar">
+                <div class="toolbox-preview-nav active"></div>
+                <div class="toolbox-preview-nav"></div>
+                <div class="toolbox-preview-nav"></div>
+                <div class="toolbox-preview-nav"></div>
+                <div class="toolbox-preview-nav"></div>
+              </div>
+              <div class="toolbox-preview-main">
+                <div class="toolbox-preview-card-inner">
+                  <div class="toolbox-preview-title"></div>
+                  <div class="toolbox-preview-text"></div>
+                </div>
+                <div class="toolbox-preview-card-inner">
+                  <div class="toolbox-preview-title" style="width: 50%;"></div>
+                  <div class="toolbox-preview-text" style="width: 70%;"></div>
+                </div>
+                <div class="toolbox-preview-card-inner">
+                  <div class="toolbox-preview-title" style="width: 60%;"></div>
+                  <div class="toolbox-preview-text" style="width: 80%;"></div>
+                </div>
+                <div style="margin-top: 16px;">
+                  <div class="toolbox-preview-btn">
+                    <div class="toolbox-preview-btn-text"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================
+       CREDENTIALS SECTION
+       ========================================== -->
+  <section class="section credentials">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-badge">Why Choose Us</div>
+        <h2 class="section-title"><span class="gradient-text">Our Credentials</span></h2>
+        <p class="section-subtitle">
+          Certified expertise backed by successful enterprise implementations.
+        </p>
+      </div>
+
+      <div class="credentials-grid">
+        <div class="credential-card reveal">
+          <div class="credential-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="8" r="6"/>
+              <path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/>
+            </svg>
+          </div>
+          <div class="credential-title">Microsoft Gold Partner</div>
+          <div class="credential-subtitle">Data & AI Solutions</div>
+        </div>
+
+        <div class="credential-card reveal">
+          <div class="credential-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/>
+              <path d="m9 12 2 2 4-4"/>
+            </svg>
+          </div>
+          <div class="credential-title">Azure Certified</div>
+          <div class="credential-subtitle">Solutions Architects</div>
+        </div>
+
+        <div class="credential-card reveal">
+          <div class="credential-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" x2="18" y1="20" y2="10"/>
+              <line x1="12" x2="12" y1="20" y2="4"/>
+              <line x1="6" x2="6" y1="20" y2="14"/>
+            </svg>
+          </div>
+          <div class="credential-title">Fabric Specialists</div>
+          <div class="credential-subtitle">Certified Engineers</div>
+        </div>
+
+        <div class="credential-card reveal">
+          <div class="credential-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+              <circle cx="9" cy="7" r="4"/>
+              <path d="M22 21v-2a4 4 0 0 0-3-3.87"/>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+            </svg>
+          </div>
+          <div class="credential-title">20+ Projects</div>
+          <div class="credential-subtitle">Enterprise Deployments</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================
+       TECHNOLOGIES SECTION
+       ========================================== -->
+  <section class="section technologies">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-badge">Technology Stack</div>
+        <h2 class="section-title"><span class="gradient-text">Fabric Components</span></h2>
+        <p class="section-subtitle">
+          Complete mastery across the entire Microsoft Fabric ecosystem.
+        </p>
+      </div>
+
+      <div class="tech-grid">
+        <div class="tech-card reveal">
+          <div class="tech-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <ellipse cx="12" cy="5" rx="9" ry="3"/>
+              <path d="M3 5V19A9 3 0 0 0 21 19V5"/>
+            </svg>
+          </div>
+          <div class="tech-name">OneLake</div>
+        </div>
+
+        <div class="tech-card reveal">
+          <div class="tech-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="3"/>
+              <path d="M12 2v4m0 12v4M2 12h4m12 0h4"/>
+            </svg>
+          </div>
+          <div class="tech-name">Data Factory</div>
+        </div>
+
+        <div class="tech-card reveal">
+          <div class="tech-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/>
+            </svg>
+          </div>
+          <div class="tech-name">Synapse</div>
+        </div>
+
+        <div class="tech-card reveal">
+          <div class="tech-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" x2="18" y1="20" y2="10"/>
+              <line x1="12" x2="12" y1="20" y2="4"/>
+              <line x1="6" x2="6" y1="20" y2="14"/>
+            </svg>
+          </div>
+          <div class="tech-name">Power BI</div>
+        </div>
+
+        <div class="tech-card reveal">
+          <div class="tech-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+            </svg>
+          </div>
+          <div class="tech-name">Spark</div>
+        </div>
+
+        <div class="tech-card reveal">
+          <div class="tech-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/>
+            </svg>
+          </div>
+          <div class="tech-name">Copilot</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================
+       CTA SECTION
+       ========================================== -->
+  <section class="cta-section" id="contact">
+    <div class="container">
+      <h2>Ready to Transform Your Data?</h2>
+      <p>
+        Let's discuss how Microsoft Fabric can accelerate your analytics journey.
+      </p>
+      <div class="cta-buttons">
+        <a href="https://nice-wave-0d4061b03.6.azurestaticapps.net" class="btn btn-white" target="_blank">
+          Try Fabric Toolbox Free
+        </a>
+        <a href="mailto:hello@oryx-data.com" class="btn btn-outline-white">
+          Contact Us
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================
+       FOOTER
+       ========================================== -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="footer-logo"><img src="oryx-logo.webp" alt="Oryx Data"></div>
+          <p class="footer-tagline">
+            Enterprise Agentic AI Platform. We help organizations unlock the full potential of their data
+            with cutting-edge analytics and AI solutions.
+          </p>
+        </div>
+
+        <div class="footer-column">
+          <h4>Data Engineering</h4>
+          <div class="footer-links">
+            <a href="/platform-databricks.html" class="footer-link">Databricks</a>
+            <a href="/platform-snowflake.html" class="footer-link">Snowflake</a>
+            <a href="/platform-fabric.html" class="footer-link">Microsoft Fabric</a>
+            <a href="/platform-confluent.html" class="footer-link">Confluent</a>
+            <a href="https://nice-wave-0d4061b03.6.azurestaticapps.net" class="footer-link" target="_blank">Fabric Toolbox</a>
+          </div>
+        </div>
+
+        <div class="footer-column">
+          <h4>Solutions</h4>
+          <div class="footer-links">
+            <a href="/solutions-finance.html" class="footer-link">Financial Services</a>
+            <a href="/solutions-healthcare.html" class="footer-link">Healthcare</a>
+            <a href="/solutions-government.html" class="footer-link">Government</a>
+            <a href="/solutions-energy.html" class="footer-link">Energy & Utilities</a>
+          </div>
+        </div>
+
+        <div class="footer-column">
+          <h4>Company</h4>
+          <div class="footer-links">
+            <a href="/about.html" class="footer-link">About Us</a>
+            <a href="/careers.html" class="footer-link">Careers</a>
+            <a href="/projects.html" class="footer-link">Projects</a>
+            <a href="/newsroom.html" class="footer-link">Newsroom</a>
+            <a href="/contact.html" class="footer-link">Contact</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div class="footer-copyright">
+          &copy; 2025 Oryx Data. All rights reserved.
+        </div>
+        <div class="footer-social">
+          <a href="https://linkedin.com/company/oryx-data" target="_blank">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/>
+              <rect width="4" height="12" x="2" y="9"/>
+              <circle cx="4" cy="4" r="2"/>
+            </svg>
+          </a>
+          <a href="https://twitter.com/oryxdata" target="_blank">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"/>
+            </svg>
+          </a>
+          <a href="https://github.com/oryx-data" target="_blank">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/>
+              <path d="M9 18c-4.51 2-5-2-7-2"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ==========================================
+       SCRIPTS
+       ========================================== -->
+  <script>
+    // Scroll reveal animation
+    const revealElements = document.querySelectorAll('.reveal');
+
+    const revealOnScroll = () => {
+      revealElements.forEach(el => {
+        const elementTop = el.getBoundingClientRect().top;
+        const windowHeight = window.innerHeight;
+
+        if (elementTop < windowHeight - 100) {
+          el.classList.add('active');
+        }
+      });
+    };
+
+    window.addEventListener('scroll', revealOnScroll);
+    window.addEventListener('load', revealOnScroll);
+
+    // Smooth scroll for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>
