@@ -42,9 +42,17 @@ jobs:
 
       - name: Prepare for deployment
         run: |
+          # Copy staticwebapp.config.json to dist
+          cp tools/FabricToolboxDashboard/staticwebapp.config.json tools/FabricToolboxDashboard/dist/
+          # Debug: show dist contents
+          echo "=== Dist folder contents ==="
+          ls -la tools/FabricToolboxDashboard/dist/
+          echo "=== Dist index.html ==="
+          head -20 tools/FabricToolboxDashboard/dist/index.html
           # Remove large folders to stay under 250MB limit
           rm -rf tools/FabricToolboxDashboard/fabric-tools
           rm -rf tools/FabricToolboxDashboard/node_modules
+          rm -rf tools/FabricToolboxDashboard/src
           # Remove API source files, keep only dist
           rm -f tools/FabricToolboxDashboard/api/*/index.ts
           rm -f tools/FabricToolboxDashboard/api/src/index.ts
