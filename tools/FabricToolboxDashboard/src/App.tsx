@@ -279,7 +279,7 @@ const AuthButton = () => {
           style={{
             background: 'transparent',
             border: 'none',
-            color: '#79B8D9',
+            color: '#2B8EC3',
             fontSize: '14px',
             cursor: 'pointer',
           }}
@@ -302,7 +302,7 @@ const AuthButton = () => {
         background: 'rgba(43,142,195,0.1)',
         border: '1px solid rgba(43,142,195,0.3)',
         borderRadius: '6px',
-        color: '#79B8D9',
+        color: '#2B8EC3',
         fontSize: '12px',
         cursor: 'pointer',
       }}
@@ -510,9 +510,9 @@ const Tag = ({ label }: { label: string }) => {
       padding: '3px 8px',
       borderRadius: '4px',
       border: '1px solid',
-      borderColor: isNew ? '#2B8EC3' : isUpdated ? '#79B8D9' : 'rgba(121,184,217,0.3)',
-      color: isNew ? '#2B8EC3' : isUpdated ? '#79B8D9' : 'rgba(170,209,231,0.7)',
-      background: isNew ? 'rgba(43,142,195,0.1)' : isUpdated ? 'rgba(121,184,217,0.1)' : 'transparent',
+      borderColor: isNew ? '#2B8EC3' : isUpdated ? '#2B8EC3' : '#cbd5e1',
+      color: isNew ? '#2B8EC3' : isUpdated ? '#2B8EC3' : '#64748b',
+      background: isNew ? 'rgba(43,142,195,0.1)' : isUpdated ? 'rgba(43,142,195,0.08)' : 'transparent',
       textTransform: 'uppercase',
     }}>
       {label}
@@ -668,7 +668,7 @@ const CommandPalette = ({ isOpen, onClose, onSelect }: {
           borderBottom: '1px solid rgba(43,142,195,0.1)',
           padding: '0 20px',
         }}>
-          <span style={{ color: '#79B8D9', marginRight: '12px', fontSize: '16px' }}>⌘</span>
+          <span style={{ color: '#2B8EC3', marginRight: '12px', fontSize: '16px' }}>⌘</span>
           <input
             ref={inputRef}
             value={query}
@@ -687,7 +687,7 @@ const CommandPalette = ({ isOpen, onClose, onSelect }: {
           />
           <span style={{
             fontSize: '11px',
-            color: 'rgba(121,184,217,0.6)',
+            color: '#2B8EC3',
             padding: '4px 8px',
             border: '1px solid rgba(43,142,195,0.3)',
             borderRadius: '4px',
@@ -731,7 +731,7 @@ const CommandPalette = ({ isOpen, onClose, onSelect }: {
                 fontFamily: "'Inter', sans-serif",
               }}>
                 <span style={{
-                  color: '#79B8D9',
+                  color: '#2B8EC3',
                   fontSize: '11px',
                   textTransform: 'uppercase',
                   fontFamily: "'Plus Jakarta Sans', sans-serif",
@@ -739,7 +739,7 @@ const CommandPalette = ({ isOpen, onClose, onSelect }: {
                 }}>
                   {tool.category}
                 </span>
-                <span style={{ color: 'rgba(121,184,217,0.4)' }}>·</span>
+                <span style={{ color: '#94a3b8' }}>·</span>
                 <span>{tool.description}</span>
               </div>
             </div>
@@ -844,7 +844,7 @@ const ConfigPanel = ({
               background: 'rgba(43,142,195,0.1)',
               border: '1px solid rgba(43,142,195,0.2)',
               borderRadius: '8px',
-              color: '#79B8D9',
+              color: '#2B8EC3',
               cursor: 'pointer',
               fontSize: '14px',
               padding: '8px 12px',
@@ -860,7 +860,7 @@ const ConfigPanel = ({
                 fontFamily: "'Plus Jakarta Sans', sans-serif",
                 fontSize: '11px',
                 fontWeight: 600,
-                color: '#79B8D9',
+                color: '#2B8EC3',
                 textTransform: 'uppercase',
                 letterSpacing: '1px',
                 marginBottom: '4px',
@@ -965,7 +965,7 @@ const ConfigPanel = ({
                   fontFamily: "'Plus Jakarta Sans', sans-serif",
                   fontSize: '13px',
                   fontWeight: 600,
-                  color: '#79B8D9',
+                  color: '#2B8EC3',
                   textTransform: 'uppercase',
                   letterSpacing: '0.5px',
                   marginBottom: '12px',
@@ -995,7 +995,7 @@ const ConfigPanel = ({
                             border: 'none',
                             borderRadius: '4px',
                             padding: '4px 10px',
-                            color: '#79B8D9',
+                            color: '#2B8EC3',
                             fontSize: '11px',
                             cursor: 'pointer',
                             fontFamily: 'monospace',
@@ -1010,7 +1010,7 @@ const ConfigPanel = ({
                           target="_blank"
                           rel="noopener noreferrer"
                           style={{
-                            color: '#79B8D9',
+                            color: '#2B8EC3',
                             fontSize: '12px',
                             textDecoration: 'none',
                           }}
@@ -1029,7 +1029,7 @@ const ConfigPanel = ({
                   fontFamily: "'Plus Jakarta Sans', sans-serif",
                   fontSize: '13px',
                   fontWeight: 600,
-                  color: '#79B8D9',
+                  color: '#2B8EC3',
                   textTransform: 'uppercase',
                   letterSpacing: '0.5px',
                   marginBottom: '12px',
@@ -1109,7 +1109,7 @@ const ConfigPanel = ({
                 fontFamily: "'Plus Jakarta Sans', sans-serif",
                 fontSize: '13px',
                 fontWeight: 600,
-                color: '#79B8D9',
+                color: '#2B8EC3',
                 textTransform: 'uppercase',
                 letterSpacing: '0.5px',
                 marginBottom: '16px',
@@ -1174,7 +1174,7 @@ const ConfigPanel = ({
                               flex: 1,
                               fontFamily: 'monospace',
                               fontSize: '12px',
-                              color: '#AAD1E7',
+                              color: '#2B8EC3',
                             }}>
                               {r.command}
                             </code>
@@ -1183,7 +1183,7 @@ const ConfigPanel = ({
                               style={{
                                 background: 'transparent',
                                 border: 'none',
-                                color: '#79B8D9',
+                                color: '#2B8EC3',
                                 cursor: 'pointer',
                                 padding: '4px',
                               }}
@@ -1209,7 +1209,7 @@ const ConfigPanel = ({
                     Expected Output
                   </h4>
                   <p style={{
-                    color: '#79B8D9',
+                    color: '#2B8EC3',
                     fontSize: '14px',
                     padding: '12px 16px',
                     background: 'rgba(43,142,195,0.08)',
@@ -1384,7 +1384,7 @@ const ConfigPanel = ({
                 fontFamily: "'Plus Jakarta Sans', sans-serif",
                 fontSize: '13px',
                 fontWeight: 600,
-                color: '#79B8D9',
+                color: '#2B8EC3',
                 textTransform: 'uppercase',
                 letterSpacing: '0.5px',
                 marginBottom: '12px',
@@ -1423,14 +1423,14 @@ const ConfigPanel = ({
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                   <div>
                     <span style={{ color: '#94a3b8', fontSize: '12px' }}>Tool source files: </span>
-                    <code style={{ color: '#AAD1E7', fontSize: '12px' }}>{tool.path}</code>
+                    <code style={{ color: '#2B8EC3', fontSize: '12px' }}>{tool.path}</code>
                   </div>
                   <button
                     onClick={() => copyToClipboard(tool.path, 'path')}
                     style={{
                       background: 'transparent',
                       border: 'none',
-                      color: '#79B8D9',
+                      color: '#2B8EC3',
                       fontSize: '12px',
                       cursor: 'pointer',
                       padding: '4px 8px',
@@ -1474,7 +1474,7 @@ const MarkdownText = ({ text }: { text: string }) => {
       // Italic: *text*
       if (part.startsWith('*') && part.endsWith('*') && part.length > 2) {
         return (
-          <em key={i} style={{ color: '#AAD1E7' }}>
+          <em key={i} style={{ color: '#2B8EC3' }}>
             {part.slice(1, -1)}
           </em>
         );
@@ -2440,7 +2440,7 @@ const AIChatPanel = ({
                 background: 'rgba(43,142,195,0.1)',
                 border: '1px solid rgba(43,142,195,0.2)',
                 borderRadius: '6px',
-                color: '#79B8D9',
+                color: '#2B8EC3',
                 cursor: 'pointer',
                 fontSize: '12px',
                 padding: '6px 12px',
@@ -2454,7 +2454,7 @@ const AIChatPanel = ({
                 background: 'rgba(43,142,195,0.1)',
                 border: '1px solid rgba(43,142,195,0.2)',
                 borderRadius: '6px',
-                color: '#79B8D9',
+                color: '#2B8EC3',
                 cursor: 'pointer',
                 fontSize: '14px',
                 padding: '6px 10px',
@@ -2505,7 +2505,7 @@ const AIChatPanel = ({
                         border: '1px solid rgba(43,142,195,0.2)',
                         borderRadius: '20px',
                         padding: '6px 14px',
-                        color: '#79B8D9',
+                        color: '#2B8EC3',
                         fontSize: '12px',
                         cursor: 'pointer',
                       }}
@@ -2564,7 +2564,7 @@ const AIChatPanel = ({
                     >
                       <code style={{
                         fontSize: '11px',
-                        color: '#AAD1E7',
+                        color: '#2B8EC3',
                         display: 'block',
                         marginBottom: '6px',
                       }}>
@@ -2690,7 +2690,7 @@ const AIChatPanel = ({
                             </div>
                           </div>
                           <span style={{
-                            color: '#79B8D9',
+                            color: '#2B8EC3',
                             fontSize: '12px',
                           }}>
                             →
@@ -3060,7 +3060,7 @@ export default function App() {
           }}>
             <div style={{
               fontSize: '11px',
-              color: 'rgba(121,184,217,0.6)',
+              color: '#2B8EC3',
               fontFamily: "'Plus Jakarta Sans', sans-serif",
               fontWeight: 600,
               textTransform: 'uppercase',
@@ -3072,7 +3072,7 @@ export default function App() {
             <div style={{
               fontFamily: "'Plus Jakarta Sans', sans-serif",
               fontSize: '28px',
-              color: '#79B8D9',
+              color: '#2B8EC3',
               fontWeight: 700,
             }}>
               {TOOLS_MANIFEST.length}
@@ -3094,17 +3094,17 @@ export default function App() {
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <span style={{
               fontSize: '13px',
-              color: 'rgba(121,184,217,0.5)',
+              color: '#64748b',
               fontFamily: "'Inter', sans-serif",
             }}>
               fabric-toolbox
             </span>
-            <span style={{ color: 'rgba(43,142,195,0.3)' }}>/</span>
+            <span style={{ color: '#94a3b8' }}>/</span>
             <span style={{
               fontSize: '13px',
-              color: '#79B8D9',
+              color: '#2B8EC3',
               fontFamily: "'Inter', sans-serif",
-              fontWeight: 500,
+              fontWeight: 600,
             }}>
               {activeCategory}
             </span>
@@ -3120,16 +3120,17 @@ export default function App() {
                 gap: '8px',
                 padding: '10px 16px',
                 background: 'linear-gradient(135deg, rgba(34,197,94,0.15) 0%, rgba(22,163,74,0.15) 100%)',
-                border: '1px solid rgba(34,197,94,0.3)',
+                border: '1px solid rgba(34,197,94,0.4)',
                 cursor: 'pointer',
-                color: '#22C55E',
+                color: '#16a34a',
                 fontSize: '14px',
+                fontWeight: 600,
                 fontFamily: "'Inter', sans-serif",
                 borderRadius: '8px',
                 transition: 'all 150ms',
               }}
             >
-              <span>🏗️</span>
+              <span style={{ display: 'flex', alignItems: 'center' }}>{Icons.rocket}</span>
               <span>Build Infra</span>
             </button>
 
@@ -3142,16 +3143,17 @@ export default function App() {
                 gap: '8px',
                 padding: '10px 16px',
                 background: 'linear-gradient(135deg, rgba(139,92,246,0.15) 0%, rgba(99,102,241,0.15) 100%)',
-                border: '1px solid rgba(139,92,246,0.3)',
+                border: '1px solid rgba(139,92,246,0.4)',
                 cursor: 'pointer',
-                color: '#A78BFA',
+                color: '#7c3aed',
                 fontSize: '14px',
+                fontWeight: 600,
                 fontFamily: "'Inter', sans-serif",
                 borderRadius: '8px',
                 transition: 'all 150ms',
               }}
             >
-              <span>✨</span>
+              <span style={{ display: 'flex', alignItems: 'center' }}>{Icons.sparkles}</span>
               <span>Ask AI</span>
             </button>
 
@@ -3163,10 +3165,10 @@ export default function App() {
                 alignItems: 'center',
                 gap: '12px',
                 padding: '10px 16px',
-                background: 'rgba(43,142,195,0.06)',
-                border: '1px solid rgba(43,142,195,0.15)',
+                background: 'rgba(43,142,195,0.08)',
+                border: '1px solid rgba(43,142,195,0.25)',
                 cursor: 'pointer',
-                color: 'rgba(170,209,231,0.7)',
+                color: '#64748b',
                 fontSize: '14px',
                 fontFamily: "'Inter', sans-serif",
                 borderRadius: '8px',
@@ -3174,6 +3176,7 @@ export default function App() {
                 transition: 'all 150ms',
               }}
             >
+              <span style={{ display: 'flex', alignItems: 'center' }}>{Icons.search}</span>
               <span>Search tools...</span>
               <span style={{
                 marginLeft: 'auto',
@@ -3183,7 +3186,7 @@ export default function App() {
                 borderRadius: '4px',
                 fontFamily: "'Plus Jakarta Sans', sans-serif",
                 fontWeight: 600,
-                color: 'rgba(121,184,217,0.6)',
+                color: '#2B8EC3',
               }}>⌘K</span>
             </button>
 
@@ -3208,7 +3211,7 @@ export default function App() {
             {CATEGORIES.find(c => c.id === activeCategory)?.label}
             <span style={{
               fontSize: '16px',
-              color: '#79B8D9',
+              color: '#2B8EC3',
               fontWeight: 500,
               background: 'rgba(43,142,195,0.1)',
               padding: '4px 12px',
