@@ -347,6 +347,91 @@
   margin-top: 16px;
 }
 
+/* Problem/Solution Section */
+.landing-problem-solution {
+  padding: 80px 0;
+  background: var(--landing-white);
+}
+
+.landing-ps-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 32px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+  .landing-ps-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.landing-ps-card {
+  padding: 32px;
+  border-radius: 16px;
+}
+
+.landing-ps-card.problem {
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.05) 0%, rgba(239, 68, 68, 0.1) 100%);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+.landing-ps-card.solution {
+  background: linear-gradient(135deg, rgba(34, 197, 94, 0.05) 0%, rgba(34, 197, 94, 0.1) 100%);
+  border: 1px solid rgba(34, 197, 94, 0.2);
+}
+
+.landing-ps-card h3 {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 600;
+  margin: 0 0 20px;
+}
+
+.landing-ps-card.problem h3 {
+  color: #DC2626;
+}
+
+.landing-ps-card.solution h3 {
+  color: #16A34A;
+}
+
+.landing-ps-card ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.landing-ps-card li {
+  position: relative;
+  padding-left: 24px;
+  margin-bottom: 12px;
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--landing-text-muted);
+}
+
+.landing-ps-card li:last-child {
+  margin-bottom: 0;
+}
+
+.landing-ps-card.problem li::before {
+  content: '✕';
+  position: absolute;
+  left: 0;
+  color: #DC2626;
+  font-weight: 600;
+}
+
+.landing-ps-card.solution li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  color: #16A34A;
+  font-weight: 600;
+}
+
 /* How It Works */
 .landing-how-it-works {
   padding: 100px 0;

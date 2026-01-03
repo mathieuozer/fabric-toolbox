@@ -2708,20 +2708,20 @@ export default function App() {
   return (
     <div style={{
       minHeight: '100vh',
-      background: '#0a0a0b',
-      color: '#FEFEFE',
-      fontFamily: "'Inter', sans-serif",
+      background: '#F8FAFC',
+      color: '#1a1a2e',
+      fontFamily: "'Plus Jakarta Sans', sans-serif",
       display: 'flex',
     }}>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
 
         ::-webkit-scrollbar { width: 8px; height: 8px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: rgba(43,142,195,0.2); border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: rgba(43,142,195,0.35); }
+        ::-webkit-scrollbar-track { background: #E2E8F0; }
+        ::-webkit-scrollbar-thumb { background: rgba(43,154,200,0.4); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(43,154,200,0.6); }
 
         @keyframes slideIn {
           from { transform: translateX(100%); opacity: 0; }
@@ -2729,8 +2729,8 @@ export default function App() {
         }
 
         select option {
-          background: #101012;
-          color: #FEFEFE;
+          background: #FFFFFF;
+          color: #1a1a2e;
         }
       `}</style>
 
@@ -2775,13 +2775,13 @@ export default function App() {
       {/* Sidebar */}
       <aside style={{
         width: sidebarExpanded ? '220px' : '64px',
-        borderRight: '1px solid rgba(43,142,195,0.12)',
+        borderRight: '1px solid #E2E8F0',
         padding: '24px 0',
         transition: 'width 150ms',
         flexShrink: 0,
         display: 'flex',
         flexDirection: 'column',
-        background: 'rgba(43,142,195,0.02)',
+        background: '#FFFFFF',
       }}>
         {/* Logo area */}
         <div
@@ -2797,24 +2797,24 @@ export default function App() {
           <div style={{
             width: '32px',
             height: '32px',
-            background: 'linear-gradient(135deg, #2B8EC3 0%, #79B8D9 100%)',
+            background: 'linear-gradient(135deg, #2B9AC8 0%, #47B7DF 100%)',
             borderRadius: '8px',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            fontFamily: "'Plus Jakarta Sans', sans-serif",
-            fontSize: '16px',
+            fontFamily: "'Space Grotesk', sans-serif",
+            fontSize: '14px',
             fontWeight: 700,
-            color: '#FEFEFE',
+            color: '#FFFFFF',
           }}>
-            F
+            FT
           </div>
           {sidebarExpanded && (
             <span style={{
-              fontFamily: "'Plus Jakarta Sans', sans-serif",
+              fontFamily: "'Space Grotesk', sans-serif",
               fontSize: '15px',
               fontWeight: 600,
-              color: '#FEFEFE',
+              color: '#1a1a2e',
               letterSpacing: '-0.01em',
             }}>
               Fabric Toolbox
@@ -2837,12 +2837,12 @@ export default function App() {
                   alignItems: 'center',
                   gap: '12px',
                   padding: '12px 12px',
-                  background: isActive ? 'rgba(43,142,195,0.12)' : 'transparent',
+                  background: isActive ? 'rgba(43,154,200,0.1)' : 'transparent',
                   border: 'none',
                   borderRadius: '8px',
                   cursor: 'pointer',
                   position: 'relative',
-                  color: isActive ? '#FEFEFE' : 'rgba(255,255,255,0.5)',
+                  color: isActive ? '#1a1a2e' : '#64748b',
                   transition: 'all 150ms',
                   textAlign: 'left',
                   marginBottom: '4px',
@@ -2856,7 +2856,7 @@ export default function App() {
                   transform: 'translateY(-50%)',
                   width: '3px',
                   height: '24px',
-                  background: 'linear-gradient(180deg, #2B8EC3 0%, #79B8D9 100%)',
+                  background: 'linear-gradient(180deg, #2B9AC8 0%, #47B7DF 100%)',
                   borderRadius: '2px',
                   opacity: isActive ? 1 : 0,
                   transition: 'opacity 150ms',
@@ -2876,15 +2876,15 @@ export default function App() {
                     <span style={{
                       flex: 1,
                       fontSize: '14px',
-                      fontFamily: "'Inter', sans-serif",
-                      fontWeight: isActive ? 500 : 400,
+                      fontFamily: "'Plus Jakarta Sans', sans-serif",
+                      fontWeight: isActive ? 600 : 400,
                     }}>
                       {cat.label}
                     </span>
                     <span style={{
                       fontSize: '11px',
-                      color: '#79B8D9',
-                      background: 'rgba(43,142,195,0.15)',
+                      color: '#2B9AC8',
+                      background: 'rgba(43,154,200,0.1)',
                       padding: '2px 6px',
                       borderRadius: '10px',
                     }}>

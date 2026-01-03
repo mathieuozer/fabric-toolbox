@@ -135,8 +135,9 @@ export function LandingPage() {
           </h1>
 
           <p className="landing-hero-subtitle">
-            Generate customized deployment scripts for your specific workload.
-            Every configuration is unique - tailored to your capacity, naming conventions, and architecture needs.
+            Stop spending hours writing deployment scripts from scratch. Fabric Toolbox generates
+            production-ready PowerShell, Bicep, and Terraform code tailored to your exact specifications —
+            capacity sizes, naming conventions, regions, and architecture patterns.
           </p>
 
           <div className="landing-hero-ctas">
@@ -160,6 +161,32 @@ export function LandingPage() {
             <div className="landing-hero-stat">
               <div className="landing-hero-stat-value">∞</div>
               <div className="landing-hero-stat-label">Configurations</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Problem/Solution Section */}
+      <section className="landing-problem-solution">
+        <div className="landing-container">
+          <div className="landing-ps-grid">
+            <div className="landing-ps-card problem">
+              <h3>The Problem</h3>
+              <ul>
+                <li>Setting up Microsoft Fabric infrastructure manually is time-consuming and error-prone</li>
+                <li>Each project requires custom configurations for capacity, workspaces, and permissions</li>
+                <li>Switching between PowerShell, Bicep, and Terraform means rewriting everything</li>
+                <li>Keeping up with Fabric API changes and best practices is a full-time job</li>
+              </ul>
+            </div>
+            <div className="landing-ps-card solution">
+              <h3>The Solution</h3>
+              <ul>
+                <li>Choose from 6 battle-tested architecture templates designed for real enterprise scenarios</li>
+                <li>Configure once, generate in any format — PowerShell, Bicep, or Terraform</li>
+                <li>Every script is customized to your exact naming conventions, regions, and capacity needs</li>
+                <li>Templates are updated monthly with the latest Fabric features and security best practices</li>
+              </ul>
             </div>
           </div>
         </div>
