@@ -1922,7 +1922,7 @@ const InfrastructureBuilderPanel = ({
                           border: '1px solid rgba(34,197,94,0.3)',
                           borderRadius: '4px',
                           padding: '6px 12px',
-                          color: msg.scriptFormat === 'powershell' ? '#1a1a2e' : '#22C55E',
+                          color: msg.scriptFormat === 'powershell' ? '#FFFFFF' : '#22C55E',
                           fontSize: '12px',
                           cursor: 'pointer',
                         }}
@@ -1940,12 +1940,12 @@ const InfrastructureBuilderPanel = ({
                           padding: '6px 12px',
                           color: isFormatLocked('bicep')
                             ? '#6B7280'
-                            : msg.scriptFormat === 'bicep' ? '#1a1a2e' : '#22C55E',
+                            : msg.scriptFormat === 'bicep' ? '#FFFFFF' : '#22C55E',
                           fontSize: '12px',
                           cursor: 'pointer',
                         }}
                       >
-                        Bicep {isFormatLocked('bicep') && '🔒'}
+                        <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>Bicep {isFormatLocked('bicep') && Icons.lock}</span>
                       </button>
                       <button
                         onClick={() => regenerateScript('terraform')}
@@ -1958,12 +1958,12 @@ const InfrastructureBuilderPanel = ({
                           padding: '6px 12px',
                           color: isFormatLocked('terraform')
                             ? '#6B7280'
-                            : msg.scriptFormat === 'terraform' ? '#1a1a2e' : '#22C55E',
+                            : msg.scriptFormat === 'terraform' ? '#FFFFFF' : '#22C55E',
                           fontSize: '12px',
                           cursor: 'pointer',
                         }}
                       >
-                        Terraform {isFormatLocked('terraform') && '🔒'}
+                        <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>Terraform {isFormatLocked('terraform') && Icons.lock}</span>
                       </button>
                     </div>
                   </div>
